@@ -26,7 +26,7 @@ public class Validate {
         }
     }
 
-    public static void ItemDto(@Valid ItemDto item) {
+    public static void itemDto(@Valid ItemDto item) {
         if (item.getName() == null || item.getName().isBlank()) {
             throw new ValidationException("Укажите название");
         }

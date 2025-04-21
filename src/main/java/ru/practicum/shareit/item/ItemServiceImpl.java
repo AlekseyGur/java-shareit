@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item itemSaved = itemStorage.get(itemId).map(ItemMapper::dtoToItem).get();
 
-        if (itemSaved.getOwner().equals(userId)) {
+        if (!itemSaved.getOwner().equals(userId)) {
             throw new AccessDeniedException("Только владелец может редактировать вещь");
         }
 

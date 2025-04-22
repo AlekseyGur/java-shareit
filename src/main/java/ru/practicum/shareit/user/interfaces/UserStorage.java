@@ -10,7 +10,7 @@ public interface UserStorage {
 
     Optional<UserDto> get(Long id);
 
-    Optional<UserDto> patch(User user);
+    Optional<UserDto> update(User user);
 
     void delete(Long id);
 

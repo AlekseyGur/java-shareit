@@ -46,28 +46,9 @@ public class ItemInMemoryStorage implements ItemStorage {
     }
 
     @Override
-    public Optional<ItemDto> patch(Item item) {
-        Long id = item.getId();
-        ItemDto itemSaved = getImpl(id).get();
-
-        if (item.getName() != null) {
-            itemSaved.setName(item.getName());
-        }
-
-        if (item.getDescription() != null) {
-            itemSaved.setDescription(item.getDescription());
-        }
-
-        if (item.getRequest() != null) {
-            itemSaved.setRequest(item.getRequest());
-        }
-
-        if (item.getAvailable() != null) {
-            itemSaved.setAvailable(item.getAvailable());
-        }
-
-        items.put(id, itemSaved);
-        return getImpl(id);
+    public Optional<ItemDto> update(Item item) {
+        items.put(item.getId(), ItemMapper.itemToDto(item));
+        return getImpl(item.getId());
     }
 
     @Override

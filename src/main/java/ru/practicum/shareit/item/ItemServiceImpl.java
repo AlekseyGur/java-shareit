@@ -54,8 +54,25 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item patch(Item item) {
-        checkAccess(item);
-        return ItemMapper.dtoToItem(itemStorage.patch(item).orElseGet(null));
+        Item itemSaved = checkAccess(item);
+
+        if (item.getName() != null) {
+            itemSaved.setName(item.getName());
+        }
+
+        if (item.getDescription() != null) {
+            itemSaved.setDescription(item.getDescription());
+        }
+
+        if (item.getRequest() != null) {
+            itemSaved.setRequest(item.getRequest());
+        }
+
+        if (item.getAvailable() != null) {
+            itemSaved.setAvailable(item.getAvailable());
+        }
+
+        return ItemMapper.dtoToItem(itemStorage.update(itemSaved).orElse(null));
     }
 
     @Override

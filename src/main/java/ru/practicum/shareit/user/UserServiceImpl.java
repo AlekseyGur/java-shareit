@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.exception.ConstraintViolationException;
 import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.user.interfaces.UserStorage;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -60,6 +62,17 @@ public class UserServiceImpl implements UserService {
             throw new DuplicatedDataException("Пользователь с таким email уже существует");
         }
 
-        return UserMapper.dtoToUser(userStorage.patch(user).orElse(null));
+        Long id = user.getId();
+        User userSaved = userStorage.get(id).map(UserMapper::dtoToUser).get();
+
+        if (user.getEmail() != null) {
+            userSaved.setEmail(user.getEmail());
+        }
+
+        if (user.getName() != null) {
+            userSaved.setName(user.getName());
+        }
+
+        return UserMapper.dtoToUser(userStorage.update(userSaved).orElse(null));
     }
 }

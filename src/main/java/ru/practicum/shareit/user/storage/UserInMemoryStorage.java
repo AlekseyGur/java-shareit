@@ -29,20 +29,9 @@ public class UserInMemoryStorage implements UserStorage {
     }
 
     @Override
-    public Optional<UserDto> patch(User user) {
-        Long id = user.getId();
-        UserDto userSaved = getImpl(id).get();
-
-        if (user.getEmail() != null) {
-            userSaved.setEmail(user.getEmail());
-        }
-
-        if (user.getName() != null) {
-            userSaved.setName(user.getName());
-        }
-
-        users.put(id, userSaved);
-        return getImpl(id);
+    public Optional<UserDto> update(User user) {
+        users.put(user.getId(), UserMapper.userToDto(user));
+        return getImpl(user.getId());
     }
 
     @Override

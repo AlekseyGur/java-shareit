@@ -13,7 +13,7 @@ public interface ItemStorage {
 
     List<ItemDto> getByUserId(Long userId);
 
-    Optional<ItemDto> patch(Item item);
+    Optional<ItemDto> update(Item item);
 
     void delete(Long id);
 

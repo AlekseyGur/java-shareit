@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ru.practicum.shareit.ShareItApp;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
-import ru.practicum.shareit.user.model.User;
 
 @SpringBootTest(classes = ShareItApp.class)
 public class UserControllerTest {
@@ -21,17 +21,17 @@ public class UserControllerTest {
 
     @Test
     void add() {
-        User user = new User();
+        UserDto user = new UserDto();
         user.setName("name");
         user.setEmail(genEmail());
 
-        User userSaved = userController.add(user);
+        UserDto userSaved = userController.add(user);
         assertTrue(userSaved.getId() > 0, "Пользователь должен добавиться");
     }
 
     @Test
     void addBadEmail() {
-        User user = new User();
+        UserDto user = new UserDto();
         user.setName("name");
         user.setEmail("test_test.test");
 
@@ -41,51 +41,51 @@ public class UserControllerTest {
 
     @Test
     void addBadName() {
-        User user = new User();
+        UserDto user = new UserDto();
         user.setName("");
         user.setEmail(genEmail());
 
-        User userSaved = userController.add(user);
+        UserDto userSaved = userController.add(user);
         assertTrue(userSaved.getId() > 0, "Пользователь должен добавиться");
     }
 
     @Test
     void patchName() {
-        User user = new User();
+        UserDto user = new UserDto();
         user.setName("name");
         user.setEmail(genEmail());
 
-        User userCreated = userController.add(user);
+        UserDto userCreated = userController.add(user);
 
-        User user2 = new User();
+        UserDto user2 = new UserDto();
         user2.setId(userCreated.getId());
         user2.setName("New");
         userService.patch(user2);
 
-        User userSaved = userController.get(userCreated.getId());
+        UserDto userSaved = userController.get(userCreated.getId());
         assertTrue(userSaved.getName().equals("New"), "Имя должно измениться");
     }
 
     @Test
     void patchEmail() {
-        User user = new User();
+        UserDto user = new UserDto();
         user.setName("name");
         user.setEmail(genEmail());
 
-        User userCreated = userController.add(user);
+        UserDto userCreated = userController.add(user);
 
-        User user2 = new User();
+        UserDto user2 = new UserDto();
         user2.setId(userCreated.getId());
         user2.setEmail(genEmail());
         userService.patch(user2);
 
-        User userSaved = userController.get(userCreated.getId());
+        UserDto userSaved = userController.get(userCreated.getId());
         assertTrue(userSaved.getEmail().equals(user2.getEmail()), "Email должно измениться");
     }
 
     @Test
     void patchUnknownUser() {
-        User user = new User();
+        UserDto user = new UserDto();
         user.setId(999999999999L);
         user.setName("name");
         user.setEmail(genEmail());
@@ -96,11 +96,11 @@ public class UserControllerTest {
 
     @Test
     void deleteUser() {
-        User user = new User();
+        UserDto user = new UserDto();
         user.setName("name");
         user.setEmail(genEmail());
 
-        User userSaved = userController.add(user);
+        UserDto userSaved = userController.add(user);
         assertTrue(userSaved.getId() > 0, "Пользователь должен добавиться");
 
         userController.delete(userSaved.getId());

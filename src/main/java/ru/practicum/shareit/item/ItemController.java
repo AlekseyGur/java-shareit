@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.utils.Validate;
 
 @RestController
@@ -28,14 +28,14 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Item> getByUserId(@RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
+    public List<ItemDto> getByUserId(@RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         return itemService.getByUserId(userId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public Item add(
-            @RequestBody Item item,
+    public ItemDto add(
+                    @RequestBody ItemDto item,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         item.setOwner(userId);
         Validate.item(item);
@@ -44,7 +44,7 @@ public class ItemController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Item get(@PathVariable Long id) {
+    public ItemDto get(@PathVariable Long id) {
         return itemService.get(id);
     }
 
@@ -56,10 +56,10 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public Item patch(
+    public ItemDto patch(
             @PathVariable Long itemId,
-            @RequestBody Item item,
-            @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
+            @RequestBody ItemDto item,
+                    @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         item.setId(itemId);
         item.setOwner(userId);
         return itemService.patch(item);
@@ -67,7 +67,7 @@ public class ItemController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<Item> search(@RequestParam String text) {
+    public List<ItemDto> search(@RequestParam String text) {
         return itemService.find(text);
     }
 }

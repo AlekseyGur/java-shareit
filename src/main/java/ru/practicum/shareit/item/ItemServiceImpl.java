@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.exception.AccessDeniedException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
 import ru.practicum.shareit.item.interfaces.ItemStorage;
 import ru.practicum.shareit.item.mapper.ItemMapper;
@@ -20,31 +21,32 @@ public class ItemServiceImpl implements ItemService {
     private final UserService userService;
 
     @Override
-    public Item add(Item item) {
+    public ItemDto add(ItemDto itemDto) {
+        Item item = ItemMapper.dtoToItem(itemDto);
         if (!userService.checkIdExist(item.getOwner())) {
             throw new NotFoundException("Пользователь с таким id не найден");
         }
-        return ItemMapper.dtoToItem(itemStorage.add(item).orElse(null));
+        return ItemMapper.itemToDto(itemStorage.add(item).orElse(null));
     }
 
     @Override
-    public Item get(Long id) {
+    public ItemDto get(Long id) {
         return itemStorage.get(id)
-                .map(ItemMapper::dtoToItem)
+                .map(ItemMapper::itemToDto)
                 .orElseThrow(() -> new NotFoundException("Вещь с таким id не найдена"));
     }
 
     @Override
-    public List<Item> find(String query) {
+    public List<ItemDto> find(String query) {
         if (query.isBlank()) {
             return List.of();
         }
-        return ItemMapper.dtoToItem(itemStorage.find(query));
+        return ItemMapper.itemToDto(itemStorage.find(query));
     }
 
     @Override
-    public List<Item> getByUserId(Long userId) {
-        return ItemMapper.dtoToItem(itemStorage.getByUserId(userId));
+    public List<ItemDto> getByUserId(Long userId) {
+        return ItemMapper.itemToDto(itemStorage.getByUserId(userId));
     }
 
     @Override
@@ -53,26 +55,26 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item patch(Item item) {
-        Item itemSaved = checkAccess(item);
+    public ItemDto patch(ItemDto itemDto) {
+        Item itemSaved = checkAccess(itemDto);
 
-        if (item.getName() != null) {
-            itemSaved.setName(item.getName());
+        if (itemDto.getName() != null) {
+            itemSaved.setName(itemDto.getName());
         }
 
-        if (item.getDescription() != null) {
-            itemSaved.setDescription(item.getDescription());
+        if (itemDto.getDescription() != null) {
+            itemSaved.setDescription(itemDto.getDescription());
         }
 
-        if (item.getRequest() != null) {
-            itemSaved.setRequest(item.getRequest());
+        if (itemDto.getRequest() != null) {
+            itemSaved.setRequest(itemDto.getRequest());
         }
 
-        if (item.getAvailable() != null) {
-            itemSaved.setAvailable(item.getAvailable());
+        if (itemDto.getAvailable() != null) {
+            itemSaved.setAvailable(itemDto.getAvailable());
         }
 
-        return ItemMapper.dtoToItem(itemStorage.update(itemSaved).orElse(null));
+        return ItemMapper.itemToDto(itemStorage.update(itemSaved).orElse(null));
     }
 
     @Override
@@ -80,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
         return itemStorage.checkIdExist(id);
     }
 
-    private Item checkAccess(Item item) {
+    private Item checkAccess(ItemDto item) {
         Long itemId = item.getId();
         Long userId = item.getOwner();
 
@@ -92,7 +94,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("Пользователь с таким id не найден");
         }
 
-        Item itemSaved = itemStorage.get(itemId).map(ItemMapper::dtoToItem).get();
+        Item itemSaved = itemStorage.get(itemId).get();
 
         if (!itemSaved.getOwner().equals(userId)) {
             throw new AccessDeniedException("Только владелец может редактировать вещь");

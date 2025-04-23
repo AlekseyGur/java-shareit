@@ -6,11 +6,11 @@ import java.util.regex.Pattern;
 import jakarta.validation.Valid;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.UserDto;
 
 @UtilityClass
 public class Validate {
-    public static void user(@Valid User user) {
+    public static void user(@Valid UserDto user) {
         if (user.getEmail() != null && (user.getEmail().isBlank() || !user.getEmail().contains("@")
                 || !isValidEmail(user.getEmail()))) {
             throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @");

@@ -6,32 +6,29 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.interfaces.ItemStorage;
-import ru.practicum.shareit.item.mapper.ItemMapper;
 
 @Repository
 public class ItemInMemoryStorage implements ItemStorage {
     public static Long itemId = 0L;
-    private static final HashMap<Long, ItemDto> items = new HashMap<>();
+    private static final HashMap<Long, Item> items = new HashMap<>();
 
     @Override
-    public Optional<ItemDto> add(Item item) {
-        ItemDto itemDto = ItemMapper.itemToDto(item);
+    public Optional<Item> add(Item item) {
         Long id = getNextId();
-        itemDto.setId(id);
-        items.put(id, itemDto);
+        item.setId(id);
+        items.put(id, item);
         return getImpl(id);
     }
 
     @Override
-    public Optional<ItemDto> get(Long id) {
+    public Optional<Item> get(Long id) {
         return getImpl(id);
     }
 
     @Override
-    public List<ItemDto> find(String query) {
+    public List<Item> find(String query) {
         String q = query.toLowerCase();
         return items.values().stream()
                 .filter(x -> x.getAvailable())
@@ -41,13 +38,13 @@ public class ItemInMemoryStorage implements ItemStorage {
     }
 
     @Override
-    public List<ItemDto> getByUserId(Long userId) {
+    public List<Item> getByUserId(Long userId) {
         return items.values().stream().filter(x -> x.getOwner().equals(userId)).toList();
     }
 
     @Override
-    public Optional<ItemDto> update(Item item) {
-        items.put(item.getId(), ItemMapper.itemToDto(item));
+    public Optional<Item> update(Item item) {
+        items.put(item.getId(), item);
         return getImpl(item.getId());
     }
 
@@ -63,7 +60,7 @@ public class ItemInMemoryStorage implements ItemStorage {
         return items.containsKey(id);
     }
 
-    private Optional<ItemDto> getImpl(Long id) {
+    private Optional<Item> getImpl(Long id) {
         return Optional.ofNullable(items.getOrDefault(id, null));
     }
 

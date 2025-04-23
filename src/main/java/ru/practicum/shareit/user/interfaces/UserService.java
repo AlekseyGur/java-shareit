@@ -1,11 +1,11 @@
 package ru.practicum.shareit.user.interfaces;
 
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.UserDto;
 
 public interface UserService {
-    User get(Long id);
+    UserDto get(Long id);
 
-    User add(User user);
+    UserDto add(UserDto user);
 
     void delete(Long id);
 
@@ -13,5 +13,5 @@ public interface UserService {
 
     boolean checkEmailExist(String email);
 
-    User patch(User user);
+    UserDto patch(UserDto user);
 }

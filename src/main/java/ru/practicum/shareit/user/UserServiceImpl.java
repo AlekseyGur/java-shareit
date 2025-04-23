@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.exception.ConstraintViolationException;
 import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.user.interfaces.UserStorage;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -17,22 +18,24 @@ public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
 
     @Override
-    public User get(Long id) {
+    public UserDto get(Long id) {
         return userStorage.get(id)
-                .map(UserMapper::dtoToUser)
+                .map(UserMapper::userToDto)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким id не найден"));
     }
 
     @Override
-    public User add(User user) {
+    public UserDto add(UserDto userDto) {
+        User user = UserMapper.dtoToUser(userDto);
+
         if (user.getEmail() == null) {
             throw new ConstraintViolationException("Нужно указать email пользователя");
         }
         if (checkEmailExist(user.getEmail())) {
             throw new DuplicatedDataException("Пользователь с таким email уже существует");
         }
-        User u = UserMapper.dtoToUser(userStorage.add(user).orElse(null));
-        return u;
+
+        return UserMapper.userToDto(userStorage.add(user).orElse(null));
     }
 
     @Override
@@ -51,7 +54,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User patch(User user) {
+    public UserDto patch(UserDto userDto) {
+        User user = UserMapper.dtoToUser(userDto);
+
         if (!userStorage.checkIdExist(user.getId())) {
             throw new NotFoundException("Пользователь с таким id не найден");
         }
@@ -61,7 +66,7 @@ public class UserServiceImpl implements UserService {
         }
 
         Long id = user.getId();
-        User userSaved = userStorage.get(id).map(UserMapper::dtoToUser).get();
+        User userSaved = userStorage.get(id).get();
 
         if (user.getEmail() != null) {
             userSaved.setEmail(user.getEmail());
@@ -71,6 +76,6 @@ public class UserServiceImpl implements UserService {
             userSaved.setName(user.getName());
         }
 
-        return UserMapper.dtoToUser(userStorage.update(userSaved).orElse(null));
+        return UserMapper.userToDto(userStorage.update(userSaved).orElse(null));
     }
 }

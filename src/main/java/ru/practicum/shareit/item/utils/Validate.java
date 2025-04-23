@@ -3,12 +3,11 @@ package ru.practicum.shareit.item.utils;
 import jakarta.validation.Valid;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 @UtilityClass
 public class Validate {
-    public static void item(@Valid Item item) {
+    public static void item(@Valid ItemDto item) {
         if (item.getOwner() == null) {
             throw new ValidationException("Укажите владельца");
         }

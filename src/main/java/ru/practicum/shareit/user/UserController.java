@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.user.interfaces.UserService;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.utils.Validate;
 
 @RestController
@@ -24,20 +24,20 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User get(@PathVariable Long id) {
+    public UserDto get(@PathVariable Long id) {
         return userService.get(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public User add(@RequestBody User user) {
+    public UserDto add(@RequestBody UserDto user) {
         Validate.user(user);
         return userService.add(user);
     }
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public User patch(@PathVariable Long userId, @RequestBody User user) {
+    public UserDto patch(@PathVariable Long userId, @RequestBody UserDto user) {
         user.setId(userId);
         Validate.user(user);
         return userService.patch(user);

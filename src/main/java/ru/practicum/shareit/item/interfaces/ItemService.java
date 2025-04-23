@@ -1,0 +1,21 @@
+package ru.practicum.shareit.item.interfaces;
+
+import java.util.List;
+
+import ru.practicum.shareit.item.dto.ItemDto;
+
+public interface ItemService {
+    ItemDto add(ItemDto item);
+
+    ItemDto get(Long id);
+
+    List<ItemDto> find(String query);
+
+    List<ItemDto> getByUserId(Long userId);
+
+    void delete(Long id);
+
+    ItemDto patch(ItemDto item);
+
+    boolean checkIdExist(Long id);
+}

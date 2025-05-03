@@ -8,7 +8,7 @@ import ru.practicum.shareit.item.model.Item;
 
 @UtilityClass
 public class ItemMapper {
-    public static ItemDto itemToDto(Item item) {
+    public static ItemDto toDto(Item item) {
         ItemDto itemDto = new ItemDto();
         itemDto.setId(item.getId());
         itemDto.setName(item.getName());
@@ -21,7 +21,7 @@ public class ItemMapper {
         return itemDto;
     }
 
-    public static Item dtoToItem(ItemDto itemDto) {
+    public static Item toItem(ItemDto itemDto) {
         Item item = new Item();
         item.setId(itemDto.getId());
         item.setName(itemDto.getName());
@@ -31,11 +31,11 @@ public class ItemMapper {
         return item;
     }
 
-    public static List<Item> dtoToItem(List<ItemDto> itemsDto) {
-        return itemsDto.stream().map(ItemMapper::dtoToItem).toList();
+    public static List<Item> toItem(List<ItemDto> itemsDto) {
+        return itemsDto.stream().map(ItemMapper::toItem).toList();
     }
 
-    public static List<ItemDto> itemToDto(List<Item> items) {
-        return items.stream().map(ItemMapper::itemToDto).toList();
+    public static List<ItemDto> toDto(List<Item> items) {
+        return items.stream().map(ItemMapper::toDto).toList();
     }
 }

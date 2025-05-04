@@ -1,4 +1,4 @@
-package ru.practicum.shareit.system;
+package ru.practicum.shareit.system.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

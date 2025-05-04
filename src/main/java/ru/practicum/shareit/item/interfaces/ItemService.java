@@ -5,7 +5,7 @@ import java.util.List;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 public interface ItemService {
-    ItemDto add(ItemDto item);
+    ItemDto add(ItemDto item, Long userId);
 
     ItemDto get(Long id);
 
@@ -15,7 +15,7 @@ public interface ItemService {
 
     void delete(Long id);
 
-    ItemDto patch(ItemDto item);
+    ItemDto patch(ItemDto item, Long userId);
 
     boolean checkIdExist(Long id);
 }

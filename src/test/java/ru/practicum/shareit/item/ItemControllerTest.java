@@ -34,9 +34,9 @@ public class ItemControllerTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved.getId());
+        item.setOwner(userSaved);
 
-        ItemDto itemSaved = itemService.add(item);
+        ItemDto itemSaved = itemService.add(item, userSaved.getId());
         assertTrue(itemSaved.getId() > 0, "Вещь должна добавиться");
     }
 
@@ -47,7 +47,8 @@ public class ItemControllerTest {
         item.setDescription("description");
         item.setAvailable(true);
 
-        assertThrows(Exception.class, () -> itemService.add(item),
+        assertThrows(Exception.class, 
+        () -> itemService.add(item, null),
                 "Надо указывать пользователя");
     }
 
@@ -63,9 +64,9 @@ public class ItemControllerTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved.getId());
+        item.setOwner(userSaved);
 
-        ItemDto itemSaved = itemService.add(item);
+        ItemDto itemSaved = itemService.add(item, userSaved.getId());
         assertTrue(itemSaved.getId() > 0, "Вещь должна добавиться");
 
         itemService.delete(itemSaved.getId());
@@ -85,9 +86,9 @@ public class ItemControllerTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved.getId());
+        item.setOwner(userSaved);
 
-        itemService.add(item);
+        itemService.add(item, userSaved.getId());
 
         List<ItemDto> itemSaved = itemService.getByUserId(userSaved.getId());
         assertTrue(itemSaved.size() == 1, "Вещь должна добавиться");
@@ -105,18 +106,18 @@ public class ItemControllerTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved.getId());
+        item.setOwner(userSaved);
 
-        ItemDto itemSaved = itemService.add(item);
+        ItemDto itemSaved = itemService.add(item, userSaved.getId());
 
         ItemDto item2 = new ItemDto();
         item2.setId(itemSaved.getId());
         item2.setName("No name");
         item2.setDescription("New");
         item2.setAvailable(true);
-        item2.setOwner(userSaved.getId());
+        item2.setOwner(userSaved);
 
-        itemService.patch(item2);
+        itemService.patch(item2, userSaved.getId());
 
         ItemDto itemUpdated = itemService.get(itemSaved.getId());
         assertTrue(itemUpdated.getName().equals(item2.getName()), "Имя должно измениться");
@@ -135,17 +136,17 @@ public class ItemControllerTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved.getId());
+        item.setOwner(userSaved);
 
-        itemService.add(item);
+        itemService.add(item, userSaved.getId());
 
         ItemDto item2 = new ItemDto();
         item2.setName("No name");
         item2.setDescription("New");
         item2.setAvailable(true);
-        item2.setOwner(userSaved.getId());
+        item2.setOwner(userSaved);
 
-        itemService.add(item2);
+        itemService.add(item2, userSaved.getId());
 
         List<ItemDto> items = itemService.find("crIpTi");
         assertTrue(items.size() == 1, "Вещь должна найтись");

@@ -5,6 +5,8 @@ import java.util.List;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.mapper.RequestMapper;
+import ru.practicum.shareit.user.mapper.UserMapper;
 
 @UtilityClass
 public class ItemMapper {
@@ -14,9 +16,9 @@ public class ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
-        itemDto.setOwner(item.getOwner());
+        itemDto.setOwner(UserMapper.toDto(item.getOwner()));
         if (item.getRequest() != null) {
-            itemDto.setRequest(item.getRequest());
+            itemDto.setRequest(RequestMapper.toDto(item.getRequest()));
         }
         return itemDto;
     }
@@ -27,7 +29,10 @@ public class ItemMapper {
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
-        item.setOwner(itemDto.getOwner());
+        item.setOwner(UserMapper.toUser(itemDto.getOwner()));
+        if (itemDto.getRequest() != null) {
+            item.setRequest(RequestMapper.toRequest(itemDto.getRequest()));
+        }
         return item;
     }
 

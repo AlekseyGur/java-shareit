@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
-import ru.practicum.shareit.item.utils.Validate;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,9 +36,7 @@ public class ItemController {
     public ItemDto add(
                     @RequestBody ItemDto item,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
-        item.setOwner(userId);
-        Validate.item(item);
-        return itemService.add(item);
+        return itemService.add(item, userId);
     }
 
     @GetMapping("/{id}")
@@ -61,8 +58,7 @@ public class ItemController {
             @RequestBody ItemDto item,
                     @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         item.setId(itemId);
-        item.setOwner(userId);
-        return itemService.patch(item);
+        return itemService.patch(item, userId);
     }
 
     @GetMapping("/search")

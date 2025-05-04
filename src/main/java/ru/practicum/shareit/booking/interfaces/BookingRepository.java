@@ -6,7 +6,7 @@ import java.util.Optional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 
-public interface BookingStorage {
+public interface BookingRepository {
     Optional<BookingDto> add(Booking booking);
 
     Optional<BookingDto> get(Long id);

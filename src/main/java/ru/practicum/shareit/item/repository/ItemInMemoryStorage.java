@@ -7,10 +7,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.interfaces.ItemStorage;
+import ru.practicum.shareit.item.interfaces.ItemRepository;
 
 @Repository
-public class ItemInMemoryStorage implements ItemStorage {
+public class ItemInMemoryStorage implements ItemRepository {
     public static Long itemId = 0L;
     private static final HashMap<Long, Item> items = new HashMap<>();
 

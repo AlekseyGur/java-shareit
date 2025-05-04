@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import ru.practicum.shareit.ShareItApp;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
+import ru.practicum.shareit.system.ShareItApp;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 
@@ -28,7 +28,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setEmail(genEmail());
 
-        UserDto userSaved = userService.add(user);
+        UserDto userSaved = userService.save(user);
 
         ItemDto item = new ItemDto();
         item.setName("name");
@@ -57,7 +57,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setEmail(genEmail());
 
-        UserDto userSaved = userService.add(user);
+        UserDto userSaved = userService.save(user);
 
         ItemDto item = new ItemDto();
         item.setName("name");
@@ -79,7 +79,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setEmail(genEmail());
 
-        UserDto userSaved = userService.add(user);
+        UserDto userSaved = userService.save(user);
 
         ItemDto item = new ItemDto();
         item.setName("name");
@@ -99,7 +99,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setEmail(genEmail());
 
-        UserDto userSaved = userService.add(user);
+        UserDto userSaved = userService.save(user);
 
         ItemDto item = new ItemDto();
         item.setName("name");
@@ -129,7 +129,7 @@ public class ItemControllerTest {
         user.setName("name");
         user.setEmail(genEmail());
 
-        UserDto userSaved = userService.add(user);
+        UserDto userSaved = userService.save(user);
 
         ItemDto item = new ItemDto();
         item.setName("name");

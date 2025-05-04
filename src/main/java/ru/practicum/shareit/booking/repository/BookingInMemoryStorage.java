@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.interfaces.BookingStorage;
+import ru.practicum.shareit.booking.interfaces.BookingRepository;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 
 @Repository
-public class BookingInMemoryStorage implements BookingStorage {
+public class BookingInMemoryStorage implements BookingRepository {
     public static Long bookingId = 0L;
     private static final HashMap<Long, BookingDto> bookings = new HashMap<>();
 

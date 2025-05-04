@@ -32,7 +32,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDto add(@RequestBody UserDto user) {
         Validate.user(user);
-        return userService.add(user);
+        return userService.save(user);
     }
 
     @PatchMapping("/{userId}")

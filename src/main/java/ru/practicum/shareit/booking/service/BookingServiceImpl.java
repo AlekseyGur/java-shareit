@@ -11,7 +11,7 @@ import ru.practicum.shareit.system.exception.AccessDeniedException;
 import ru.practicum.shareit.system.exception.NotFoundException;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
-import ru.practicum.shareit.booking.interfaces.BookingStorage;
+import ru.practicum.shareit.booking.interfaces.BookingRepository;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -20,7 +20,7 @@ import ru.practicum.shareit.user.interfaces.UserService;
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-    private final BookingStorage bookingStorage;
+    private final BookingRepository bookingStorage;
     private final UserService userService;
     private final ItemService itemService;
 

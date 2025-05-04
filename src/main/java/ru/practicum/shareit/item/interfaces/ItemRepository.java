@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import ru.practicum.shareit.item.model.Item;
 
-public interface ItemStorage {
+public interface ItemRepository {
     Optional<Item> add(Item item);
 
     Optional<Item> get(Long id);

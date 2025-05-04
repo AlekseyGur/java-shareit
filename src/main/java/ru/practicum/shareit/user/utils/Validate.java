@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import jakarta.validation.Valid;
 import lombok.experimental.UtilityClass;
-import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.system.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 
 @UtilityClass

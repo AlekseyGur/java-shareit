@@ -17,18 +17,18 @@ import ru.practicum.shareit.user.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final UserRepository userStorage;
+    private final UserRepository userRepository;
 
     @Override
     public UserDto get(Long id) {
-        return userStorage.findById(id)
+        return userRepository.findById(id)
                 .map(UserMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким id не найден"));
     }
 
     @Override
     public List<UserDto> get(List<Long> ids) {
-        return userStorage.getByIdIn(ids).stream().map(UserMapper::toDto).toList();
+        return userRepository.getByIdIn(ids).stream().map(UserMapper::toDto).toList();
     }
 
     @Override
@@ -42,29 +42,29 @@ public class UserServiceImpl implements UserService {
             throw new DuplicatedDataException("Пользователь с таким email уже существует");
         }
 
-        return UserMapper.toDto(userStorage.save(user));
+        return UserMapper.toDto(userRepository.save(user));
     }
 
     @Override
     public void delete(Long id) {
-        userStorage.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     public boolean checkIdExist(Long id) {
-        return userStorage.existsById(id);
+        return userRepository.existsById(id);
     }
 
     @Override
     public boolean checkEmailExist(String email) {
-        return userStorage.existsByEmail(email);
+        return userRepository.existsByEmail(email);
     }
 
     @Override
     public UserDto patch(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
 
-        if (!userStorage.existsById(user.getId())) {
+        if (!userRepository.existsById(user.getId())) {
             throw new NotFoundException("Пользователь с таким id не найден");
         }
 
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
         }
 
         Long id = user.getId();
-        User userSaved = userStorage.findById(id).get();
+        User userSaved = userRepository.findById(id).get();
 
         if (user.getEmail() != null) {
             userSaved.setEmail(user.getEmail());
@@ -83,6 +83,6 @@ public class UserServiceImpl implements UserService {
             userSaved.setName(user.getName());
         }
 
-        return UserMapper.toDto(userStorage.save(userSaved));
+        return UserMapper.toDto(userRepository.save(userSaved));
     }
 }

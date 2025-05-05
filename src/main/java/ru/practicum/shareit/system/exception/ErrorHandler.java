@@ -14,14 +14,14 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse constraintViolationException(final ConstraintViolationException e) {
-        log.error("Ошибка сервера. " + e.getMessage());
+        log.error("Недопустимое значение параметра. " + e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse methodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.error("Ошибка сервера. " + e.getMessage());
+        log.error("Неверный запрос. " + e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
@@ -33,7 +33,14 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse accessDeniedException(final AccessDeniedException e) {
+        log.error("Доступ заблокирован. " + e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse conditionsNotMetException(final ConditionsNotMetException e) {
         log.error("Условия не выполнены. " + e.getMessage());
         return new ErrorResponse(e.getMessage());
@@ -42,7 +49,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse duplicatedDataException(final DuplicatedDataException e) {
-        log.error("Добавление данных. " + e.getMessage());
+        log.error("Дубликат данных. " + e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
@@ -56,7 +63,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validationException(final ValidationException e) {
-        log.error("Неверный запрос. " + e.getMessage());
+        log.error("Данные не прошли проверку. " + e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 }

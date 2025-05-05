@@ -43,6 +43,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<ItemDto> get(List<Long> ids) {
+        return itemRepository.getByIdIn(ids).stream().map(ItemMapper::toDto).toList();
+    }
+
+    @Override
     public List<ItemDto> findAvailableByNameOrDescription(String query) {
         if (query.isBlank()) {
             return List.of();
@@ -89,8 +94,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public boolean checkIdExist(Long id) {
-        return itemRepository.existsById(id);
+    public boolean isItemAvailable(Long itemId) {
+        return itemRepository.findAvailableByItemId(itemId);
+    }
+
+    @Override
+    public boolean checkIdExist(Long itemId) {
+        return itemRepository.existsById(itemId);
     }
 
     private Item checkAccess(ItemDto item, Long userId) {

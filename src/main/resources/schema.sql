@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS items (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT, -- Change text to Varchar
-    is_available BOOLEAN NOT NULL DEFAULT TRUE,
+    is_available BOOLEAN NOT NULL,
     owner_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     request_id BIGINT REFERENCES requests(id) ON DELETE CASCADE
 );

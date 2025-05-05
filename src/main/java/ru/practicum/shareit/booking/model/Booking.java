@@ -3,17 +3,13 @@ package ru.practicum.shareit.booking.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = { "item", "booker" })
 @Entity
 @Table(name = "bookings")
 public class Booking {
@@ -27,13 +23,11 @@ public class Booking {
     @Column(name = "end_date", nullable = false)
     private LocalDateTime end;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item item;
+    @Column(name = "item_id", nullable = false)
+    private Long itemId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booker_id", nullable = false)
-    private User booker;
+    @Column(name = "booker_id", nullable = false)
+    private Long bookerId;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)

@@ -4,8 +4,6 @@ import java.util.List;
 
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 
 public class BookingMapper {
@@ -16,8 +14,8 @@ public class BookingMapper {
         bookingDto.setEnd(booking.getEnd());
         bookingDto.setStart(booking.getStart());
         bookingDto.setStatus(booking.getStatus());
-        bookingDto.setItem(ItemMapper.toDto(booking.getItem()));
-        bookingDto.setBooker(UserMapper.toDto(booking.getBooker()));
+        bookingDto.setItemId(booking.getItemId());
+        bookingDto.setBookerId(booking.getBookerId());
         return bookingDto;
     }
 
@@ -31,8 +29,8 @@ public class BookingMapper {
         booking.setEnd(bookingDto.getEnd());
         booking.setStart(bookingDto.getStart());
         booking.setStatus(bookingDto.getStatus());
-        booking.setItem(ItemMapper.toItem(bookingDto.getItem()));
-        booking.setBooker(UserMapper.toUser(bookingDto.getBooker()));
+        booking.setItemId(bookingDto.getItemId());
+        booking.setBookerId(bookingDto.getBookerId());
         return booking;
     }
 

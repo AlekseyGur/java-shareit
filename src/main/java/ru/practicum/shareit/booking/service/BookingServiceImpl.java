@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -12,16 +11,18 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.interfaces.ItemService;
 import ru.practicum.shareit.user.interfaces.UserService;
-import ru.practicum.shareit.user.mapper.UserMapper;
-import ru.practicum.shareit.user.model.User;
 
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingStorage;
     private final UserService userService;
+    private final ItemService itemService;
 
     @Override
     public BookingDto get(Long id) {
@@ -35,18 +36,29 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getByUserId(Long userId) {
-        return BookingMapper.toDto(bookingStorage.getByBookerId(userId));
+    public List<BookingDto> getByBooker(Long userId, BookingStatus state) {
+        return BookingMapper.toDto(bookingStorage.getByBookerIdAndStatus(userId, state));
+    }
+
+    @Override
+    public List<BookingDto> getByOwner(Long userId, BookingStatus state) {
+        List<Long> itemsIds = itemService.getByUserId(userId).stream().map(ItemDto::getId).toList();
+        return BookingMapper.toDto(bookingStorage.getByItemIdInAndStatus(itemsIds, state));
+    }
+
+    @Override
+    public BookingDto updateStatus(Long bookingId, Long userId, boolean approved) {
+        Booking bookingSaved = checkAccessAndGetBooking(bookingId, userId);
+
+        bookingSaved.setStatus(BookingStatus.CURRENT);
+
+        return BookingMapper.toDto(bookingStorage.save(bookingSaved));
     }
 
     @Override
     public BookingDto add(BookingDto booking, Long userId) {
-        User user = Optional.of(userService.get(userId))
-                .map(UserMapper::toUser)
-                .get();
-
         Booking bookingSaved = BookingMapper.toBooking(booking);
-        bookingSaved.setBooker(user);
+        bookingSaved.setBookerId(userId);
         return BookingMapper.toDto(bookingStorage.save(bookingSaved));
     }
 
@@ -57,7 +69,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto update(Long bookingId, BookingDto booking, Long userId) {
-        Booking bookingSaved = checkAccessAndGetBooking(bookingId, booking, userId);
+        Booking bookingSaved = checkAccessAndGetBooking(bookingId, userId);
 
         if (booking.getStatus() != null) {
             bookingSaved.setStatus(booking.getStatus());
@@ -71,19 +83,20 @@ public class BookingServiceImpl implements BookingService {
         return bookingStorage.existsById(id);
     }
 
-    private Booking checkAccessAndGetBooking(Long bookingId, BookingDto booking, Long userId) {
-        if (booking == null || !checkIdExist(bookingId)) {
+    private Booking checkAccessAndGetBooking(Long bookingId, Long userId) {
+
+        if (bookingId == null || !checkIdExist(bookingId)) {
             throw new NotFoundException("Бронь с таким id не найдена");
         }
 
-        if (!userService.checkIdExist(userId)) {
+        if (userId == null || !userService.checkIdExist(userId)) {
             throw new NotFoundException("Пользователь с таким id не найден");
         }
 
         Booking bookingSaved = bookingStorage.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронь с таким id не найдена"));
 
-        if (bookingSaved.getBooker().getId() != userId) {
+        if (bookingSaved.getBookerId() != userId) {
             throw new AccessDeniedException("Только владелец может редактировать заказ");
         }
 

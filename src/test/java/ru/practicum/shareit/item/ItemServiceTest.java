@@ -11,12 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
-import ru.practicum.shareit.system.ShareItApp;
+import ru.practicum.shareit.system.config.ShareItApp;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 
 @SpringBootTest(classes = ShareItApp.class)
-public class ItemControllerTest {
+public class ItemServiceTest {
     @Autowired
     private ItemService itemService;
     @Autowired

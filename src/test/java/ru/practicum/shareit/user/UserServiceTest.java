@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import ru.practicum.shareit.system.ShareItApp;
+import ru.practicum.shareit.system.config.ShareItApp;
 import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 
 @SpringBootTest(classes = ShareItApp.class)
-public class UserControllerTest {
+public class UserServiceTest {
     @Autowired
     private UserController userController;
     @Autowired

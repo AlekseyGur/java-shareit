@@ -20,7 +20,7 @@ import ru.practicum.shareit.user.interfaces.UserService;
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-    private final BookingRepository bookingStorage;
+    private final BookingRepository bookingRepository;
     private final UserService userService;
     private final ItemService itemService;
 
@@ -29,21 +29,15 @@ public class BookingServiceImpl implements BookingService {
         return getImpl(id);
     }
 
-    private BookingDto getImpl(Long id) {
-        return bookingStorage.findById(id)
-                .map(BookingMapper::toDto)
-                .orElseThrow(() -> new NotFoundException("Бронь с таким id не найдена"));
-    }
-
     @Override
     public List<BookingDto> getByBooker(Long userId, BookingStatus state) {
-        return BookingMapper.toDto(bookingStorage.getByBookerIdAndStatus(userId, state));
+        return BookingMapper.toDto(bookingRepository.getByBookerIdAndStatus(userId, state));
     }
 
     @Override
     public List<BookingDto> getByOwner(Long userId, BookingStatus state) {
         List<Long> itemsIds = itemService.getByUserId(userId).stream().map(ItemDto::getId).toList();
-        return BookingMapper.toDto(bookingStorage.getByItemIdInAndStatus(itemsIds, state));
+        return BookingMapper.toDto(bookingRepository.getByItemIdInAndStatus(itemsIds, state));
     }
 
     @Override
@@ -52,19 +46,19 @@ public class BookingServiceImpl implements BookingService {
 
         bookingSaved.setStatus(BookingStatus.CURRENT);
 
-        return BookingMapper.toDto(bookingStorage.save(bookingSaved));
+        return BookingMapper.toDto(bookingRepository.save(bookingSaved));
     }
 
     @Override
     public BookingDto add(BookingDto booking, Long userId) {
         Booking bookingSaved = BookingMapper.toBooking(booking);
         bookingSaved.setBookerId(userId);
-        return BookingMapper.toDto(bookingStorage.save(bookingSaved));
+        return BookingMapper.toDto(bookingRepository.save(bookingSaved));
     }
 
     @Override
     public void delete(Long id) {
-        bookingStorage.deleteById(id);
+        bookingRepository.deleteById(id);
     }
 
     @Override
@@ -75,12 +69,12 @@ public class BookingServiceImpl implements BookingService {
             bookingSaved.setStatus(booking.getStatus());
         }
 
-        return BookingMapper.toDto(bookingStorage.save(bookingSaved));
+        return BookingMapper.toDto(bookingRepository.save(bookingSaved));
     }
 
     @Override
     public boolean checkIdExist(Long id) {
-        return bookingStorage.existsById(id);
+        return bookingRepository.existsById(id);
     }
 
     private Booking checkAccessAndGetBooking(Long bookingId, Long userId) {
@@ -93,7 +87,7 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException("Пользователь с таким id не найден");
         }
 
-        Booking bookingSaved = bookingStorage.findById(bookingId)
+        Booking bookingSaved = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронь с таким id не найдена"));
 
         if (bookingSaved.getBookerId() != userId) {
@@ -103,4 +97,9 @@ public class BookingServiceImpl implements BookingService {
         return bookingSaved;
     }
 
+    private BookingDto getImpl(Long id) {
+        return bookingRepository.findById(id)
+                .map(BookingMapper::toDto)
+                .orElseThrow(() -> new NotFoundException("Бронь с таким id не найдена"));
+    }
 }

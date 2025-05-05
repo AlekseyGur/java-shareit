@@ -1,7 +1,6 @@
 package ru.practicum.shareit.comment.interfaces;
 
 import java.util.List;
-import java.util.Optional;
 
 import ru.practicum.shareit.comment.dto.CommentDto;
 
@@ -9,7 +8,7 @@ public interface CommentService {
 
     List<CommentDto> getAll();
 
-    Optional<CommentDto> getById(Long id);
+    CommentDto get(Long id);
 
     CommentDto add(CommentDto comment);
 
@@ -17,7 +16,9 @@ public interface CommentService {
 
     void delete(Long id);
 
-    List<CommentDto> findByItemId(Long postId);
+    List<CommentDto> findByItemId(Long itemId);
 
-    List<CommentDto> findByAuthorId(Long author);
+    List<CommentDto> findByItemId(List<Long> itemIds);
+
+    List<CommentDto> findByAuthorId(Long authorId);
 }

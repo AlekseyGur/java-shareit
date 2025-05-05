@@ -1,5 +1,7 @@
 package ru.practicum.shareit.user.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,11 @@ public class UserServiceImpl implements UserService {
         return userStorage.findById(id)
                 .map(UserMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким id не найден"));
+    }
+
+    @Override
+    public List<UserDto> get(List<Long> ids) {
+        return userStorage.getByIdIn(ids).stream().map(UserMapper::toDto).toList();
     }
 
     @Override

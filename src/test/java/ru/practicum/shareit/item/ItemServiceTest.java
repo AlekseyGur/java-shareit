@@ -148,7 +148,7 @@ public class ItemServiceTest {
 
         itemService.add(item2, userSaved.getId());
 
-        List<ItemDto> items = itemService.find("crIpTi");
+        List<ItemDto> items = itemService.findAvailableByNameOrDescription("crIpTi");
         assertTrue(items.size() == 1, "Вещь должна найтись");
     }
 

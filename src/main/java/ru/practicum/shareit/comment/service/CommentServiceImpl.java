@@ -1,7 +1,8 @@
 package ru.practicum.shareit.comment.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.comment.interfaces.CommentService;
 import ru.practicum.shareit.comment.repository.CommentRepository;
+import ru.practicum.shareit.system.exception.NotFoundException;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.comment.mapper.CommentMapper;
 import ru.practicum.shareit.comment.model.Comment;
 
@@ -16,31 +20,32 @@ import ru.practicum.shareit.comment.model.Comment;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
+    private final UserService userService;
 
     @Override
     public List<CommentDto> getAll() {
-        List<Comment> comments = commentRepository.findAll();
-        return comments.stream()
+        List<CommentDto> comments = commentRepository.findAll().stream()
                 .map(CommentMapper::toDto)
                 .toList();
+        return addUserInfo(comments);
     }
 
     @Override
-    public Optional<CommentDto> getById(Long id) {
-        return commentRepository.findById(id)
-                .map(CommentMapper::toDto);
+    public CommentDto get(Long id) {
+        CommentDto comment = commentRepository.findById(id)
+                .map(CommentMapper::toDto)
+                .orElseThrow(() -> new NotFoundException("Комментарий с таким id не найден"));
+        return addUserInfo(comment);
     }
 
     @Override
     public CommentDto add(CommentDto commentDto) {
-        Comment comment = CommentMapper.toComment(commentDto);
-        return CommentMapper.toDto(commentRepository.save(comment));
+        return save(commentDto);
     }
 
     @Override
     public CommentDto update(CommentDto commentDto) {
-        Comment comment = CommentMapper.toComment(commentDto);
-        return CommentMapper.toDto(commentRepository.save(comment));
+        return save(commentDto);
     }
 
     @Override
@@ -49,18 +54,46 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> findByItemId(Long postId) {
-        List<Comment> comments = commentRepository.findByItemId(postId);
-        return comments.stream()
-                .map(CommentMapper::toDto)
-                .toList();
+    public List<CommentDto> findByItemId(Long itemId) {
+        List<CommentDto> commentsDto = CommentMapper.toDto(commentRepository.findByItemId(itemId));
+        return addUserInfo(commentsDto);
     }
 
     @Override
-    public List<CommentDto> findByAuthorId(Long author) {
-        List<Comment> comments = commentRepository.findByAuthorId(author);
+    public List<CommentDto> findByItemId(List<Long> itemIds) {
+        List<CommentDto> commentsDto = CommentMapper.toDto(commentRepository.findByItemIdIn(itemIds));
+        return addUserInfo(commentsDto);
+    }
+
+    @Override
+    public List<CommentDto> findByAuthorId(Long authorId) {
+        List<CommentDto> commentsDto = CommentMapper.toDto(commentRepository.findByAuthorId(authorId));
+        return addUserInfo(commentsDto);
+    }
+
+    private List<CommentDto> addUserInfo(List<CommentDto> comments) {
+        List<Long> authorsIds = comments.stream().map(CommentDto::getAuthorId).toList();
+        List<UserDto> users = userService.get(authorsIds);
+        Map<Long, String> usersNames = users.stream()
+                .collect(Collectors.toMap(
+                        UserDto::getId,
+                        UserDto::getName));
+
         return comments.stream()
-                .map(CommentMapper::toDto)
-                .toList();
+                .map(x -> {
+                    String name = usersNames.getOrDefault(x.getAuthorId(), "no name");
+                    x.setAuthorName(name);
+                    return x;
+                }).toList();
+    }
+
+    private CommentDto addUserInfo(CommentDto comment) {
+        return addUserInfo(List.of(comment)).get(0);
+    }
+
+    private CommentDto save(CommentDto commentDto) {
+        Comment comment = CommentMapper.toComment(commentDto);
+        CommentDto commentSaved = CommentMapper.toDto(commentRepository.save(comment));
+        return addUserInfo(commentSaved);
     }
 }

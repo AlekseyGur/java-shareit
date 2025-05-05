@@ -9,7 +9,7 @@ public interface ItemService {
 
     ItemDto get(Long id);
 
-    List<ItemDto> find(String query);
+    List<ItemDto> findAvailableByNameOrDescription(String query);
 
     List<ItemDto> getByUserId(Long userId);
 

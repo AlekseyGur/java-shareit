@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
+import ru.practicum.shareit.item.utils.Validate;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,8 +35,10 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public ItemDto add(
-                    @RequestBody ItemDto item,
-            @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
+            @RequestBody ItemDto item,
+                    @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
+        item.setOwnerId(userId);
+        Validate.itemDto(item);
         return itemService.add(item, userId);
     }
 
@@ -56,14 +59,15 @@ public class ItemController {
     public ItemDto patch(
             @PathVariable Long itemId,
             @RequestBody ItemDto item,
-                    @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
+            @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         item.setId(itemId);
+        item.setOwnerId(userId);
         return itemService.patch(item, userId);
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> search(@RequestParam String text) {
-        return itemService.find(text);
+        return itemService.findAvailableByNameOrDescription(text);
     }
 }

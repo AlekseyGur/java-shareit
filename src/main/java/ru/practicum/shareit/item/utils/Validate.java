@@ -8,7 +8,7 @@ import ru.practicum.shareit.system.exception.ValidationException;
 @UtilityClass
 public class Validate {
     public static void item(@Valid ItemDto item) {
-        if (item.getOwner() == null) {
+        if (item.getOwnerId() == null) {
             throw new ValidationException("Укажите владельца");
         }
 

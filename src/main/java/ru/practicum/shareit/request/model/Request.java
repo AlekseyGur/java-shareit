@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.user.model.User;
 import jakarta.persistence.*;
 
 @Data
@@ -20,8 +19,8 @@ public class Request {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "requestor_id")
-    private User requestor;
+    @Column(name = "requestor_id", nullable = false)
+    private Long requestorId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

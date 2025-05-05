@@ -34,7 +34,7 @@ public class ItemServiceTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved);
+        item.setOwnerId(userSaved.getId());
 
         ItemDto itemSaved = itemService.add(item, userSaved.getId());
         assertTrue(itemSaved.getId() > 0, "Вещь должна добавиться");
@@ -64,7 +64,7 @@ public class ItemServiceTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved);
+        item.setOwnerId(userSaved.getId());
 
         ItemDto itemSaved = itemService.add(item, userSaved.getId());
         assertTrue(itemSaved.getId() > 0, "Вещь должна добавиться");
@@ -86,7 +86,7 @@ public class ItemServiceTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved);
+        item.setOwnerId(userSaved.getId());
 
         itemService.add(item, userSaved.getId());
 
@@ -106,7 +106,7 @@ public class ItemServiceTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved);
+        item.setOwnerId(userSaved.getId());
 
         ItemDto itemSaved = itemService.add(item, userSaved.getId());
 
@@ -115,7 +115,7 @@ public class ItemServiceTest {
         item2.setName("No name");
         item2.setDescription("New");
         item2.setAvailable(true);
-        item2.setOwner(userSaved);
+        item2.setOwnerId(userSaved.getId());
 
         itemService.patch(item2, userSaved.getId());
 
@@ -136,7 +136,7 @@ public class ItemServiceTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-        item.setOwner(userSaved);
+        item.setOwnerId(userSaved.getId());
 
         itemService.add(item, userSaved.getId());
 
@@ -144,7 +144,7 @@ public class ItemServiceTest {
         item2.setName("No name");
         item2.setDescription("New");
         item2.setAvailable(true);
-        item2.setOwner(userSaved);
+        item2.setOwnerId(userSaved.getId());
 
         itemService.add(item2, userSaved.getId());
 

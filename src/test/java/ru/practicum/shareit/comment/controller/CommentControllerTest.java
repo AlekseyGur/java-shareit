@@ -40,7 +40,7 @@ class CommentControllerTest {
         itemDto.setAvailable(true);
         itemDto.setName("Item name");
         itemDto.setDescription("Item descritption");
-        itemDto.setOwner(userSaved);
+        itemDto.setOwnerId(userSaved.getId());
         ItemDto itemSaved = itemService.add(itemDto, userSaved.getId());
 
         CommentDto commentDto = new CommentDto();

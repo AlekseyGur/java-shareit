@@ -5,8 +5,6 @@ import java.util.List;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.request.mapper.RequestMapper;
-import ru.practicum.shareit.user.mapper.UserMapper;
 
 @UtilityClass
 public class ItemMapper {
@@ -16,9 +14,11 @@ public class ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
-        itemDto.setOwner(UserMapper.toDto(item.getOwner()));
-        if (item.getRequest() != null) {
-            itemDto.setRequest(RequestMapper.toDto(item.getRequest()));
+        if (item.getOwnerId() != null) {
+            itemDto.setOwnerId(item.getOwnerId());
+        }
+        if (item.getRequestId() != null) {
+            itemDto.setRequestId(item.getRequestId());
         }
         return itemDto;
     }
@@ -29,9 +29,11 @@ public class ItemMapper {
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
-        item.setOwner(UserMapper.toUser(itemDto.getOwner()));
-        if (itemDto.getRequest() != null) {
-            item.setRequest(RequestMapper.toRequest(itemDto.getRequest()));
+        if (itemDto.getOwnerId() != null) {
+            item.setOwnerId(itemDto.getOwnerId());
+        }
+        if (itemDto.getRequestId() != null) {
+            item.setRequestId(itemDto.getRequestId());
         }
         return item;
     }

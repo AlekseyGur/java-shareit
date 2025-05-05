@@ -10,7 +10,6 @@ import ru.practicum.shareit.item.interfaces.ItemService;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.request.mapper.RequestMapper;
 import ru.practicum.shareit.system.exception.AccessDeniedException;
 import ru.practicum.shareit.system.exception.NotFoundException;
 import ru.practicum.shareit.user.interfaces.UserService;
@@ -69,8 +68,8 @@ public class ItemServiceImpl implements ItemService {
             itemSaved.setDescription(itemDto.getDescription());
         }
 
-        if (itemDto.getRequest() != null) {
-            itemSaved.setRequest(RequestMapper.toRequest(itemDto.getRequest()));
+        if (itemDto.getRequestId() != null) {
+            itemSaved.setRequestId(itemDto.getRequestId());
         }
 
         if (itemDto.getAvailable() != null) {
@@ -98,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item itemSaved = itemRepository.findById(itemId).get();
 
-        if (!itemSaved.getOwner().getId().equals(userId)) {
+        if (!itemSaved.getOwnerId().equals(userId)) {
             throw new AccessDeniedException("Только владелец может редактировать вещь");
         }
 

@@ -3,8 +3,6 @@ package ru.practicum.shareit.item.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.request.model.Request;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,11 +24,9 @@ public class Item {
     @Column(name = "is_available", nullable = false)
     private Boolean available;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    @Column(name = "owner_id", nullable = false)
+    private Long ownerId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "request_id")
-    private Request request;
+    @Column(name = "request_id")
+    private Long requestId;
 }

@@ -31,15 +31,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto add(BookingDto booking, Long userId) {
-        if (!itemService.checkIdExist(booking.getItemId())) {
-            throw new NotFoundException("Вещь с таким id не найдена");
-        }
-        if (!itemService.isItemAvailable(booking.getItemId())) {
-            throw new ValidationException("Эту вещь сейчас невозможно забронировать");
-        }
-        if (!userService.checkIdExist(userId)) {
-            throw new NotFoundException("Пользователь с таким id не найден");
-        }
+        checkItemAndUserExist(booking.getItemId(), userId);
 
         Booking bookingNew = BookingMapper.toBooking(booking);
         bookingNew.setBookerId(userId);
@@ -56,22 +48,38 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getByBooker(Long userId, BookingStatus state) {
-        return BookingMapper.toDto(bookingRepository.getByBookerIdAndStatus(userId, state));
+        List<BookingDto> res;
+
+        if (state.equals(BookingStatus.ALL)) {
+            res = BookingMapper.toDto(bookingRepository.getByBookerId(userId));
+        } else {
+            res = BookingMapper.toDto(bookingRepository.getByBookerIdAndStatus(userId, state));
+        }
+
+        return addBookingInfo(res);
     }
 
     @Override
     public List<BookingDto> getByOwner(Long userId, BookingStatus state) {
+        if (userId == null || !userService.checkIdExist(userId)) {
+            throw new NotFoundException("Пользователь с таким id не найден");
+        }
+
         List<Long> itemsIds = itemService.getByUserId(userId).stream().map(ItemDto::getId).toList();
         return BookingMapper.toDto(bookingRepository.getByItemIdInAndStatus(itemsIds, state));
     }
 
     @Override
     public BookingDto updateStatus(Long bookingId, Long userId, boolean approved) {
-        Booking bookingSaved = checkAccessAndGetBooking(bookingId, userId);
+        Booking bookingSaved = checkAccessForStatusChangeAndGetBooking(bookingId, userId);
 
-        bookingSaved.setStatus(BookingStatus.CURRENT);
+        BookingStatus status = approved ? BookingStatus.APPROVED : BookingStatus.REJECTED;
 
-        return BookingMapper.toDto(bookingRepository.save(bookingSaved));
+        bookingSaved.setStatus(status);
+
+        BookingDto res = BookingMapper.toDto(bookingRepository.save(bookingSaved));
+
+        return addBookingInfo(res);
     }
 
     @Override
@@ -81,7 +89,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto update(Long bookingId, BookingDto booking, Long userId) {
-        Booking bookingSaved = checkAccessAndGetBooking(bookingId, userId);
+        Booking bookingSaved = checkAccessForUpdateAndGetBooking(bookingId, userId);
 
         if (booking.getStatus() != null) {
             bookingSaved.setStatus(booking.getStatus());
@@ -95,21 +103,53 @@ public class BookingServiceImpl implements BookingService {
         return checkIdExistImpl(id);
     }
 
-    private Booking checkAccessAndGetBooking(Long bookingId, Long userId) {
+    @Override
+    public boolean checkItemForBookerApproved(Long bookerId, Long itemId) {
+        return bookingRepository.checkItemForBookerApproved(bookerId, itemId, BookingStatus.APPROVED.ordinal());
+    }
 
+    private void checkItemAndUserExist(Long bookingId, Long userId) {
+        if (!itemService.checkIdExist(bookingId)) {
+            throw new NotFoundException("Вещь с таким id не найдена");
+        }
+        if (!userService.checkIdExist(userId)) {
+            throw new NotFoundException("Пользователь с таким id не найден");
+        }
+        if (!itemService.isItemAvailable(bookingId)) {
+            throw new ValidationException("Эту вещь сейчас невозможно забронировать");
+        }
+    }
+
+    private Booking checkBookingAndUserExistReturnBooking(Long bookingId, Long userId) {
         if (bookingId == null || !checkIdExistImpl(bookingId)) {
             throw new NotFoundException("Бронь с таким id не найдена");
         }
 
         if (userId == null || !userService.checkIdExist(userId)) {
-            throw new NotFoundException("Пользователь с таким id не найден");
+            throw new AccessDeniedException("Пользователь с таким id не найден");
         }
 
-        Booking bookingSaved = bookingRepository.findById(bookingId)
+        return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронь с таким id не найдена"));
 
+    }
+
+    private Booking checkAccessForUpdateAndGetBooking(Long bookingId, Long userId) {
+        Booking bookingSaved = checkBookingAndUserExistReturnBooking(bookingId, userId);
+
         if (bookingSaved.getBookerId() != userId) {
-            throw new AccessDeniedException("Только владелец может редактировать заказ");
+            throw new AccessDeniedException("Только владелец заказа может редактировать заказ");
+        }
+
+        return bookingSaved;
+    }
+
+    private Booking checkAccessForStatusChangeAndGetBooking(Long bookingId, Long userId) {
+        Booking bookingSaved = checkBookingAndUserExistReturnBooking(bookingId, userId);
+        Long itemOwnerId = itemService.get(bookingSaved.getItemId()).getOwnerId();
+
+        if (itemOwnerId != userId) {
+            throw new AccessDeniedException("Только владелец вещи может одобрить заказ");
         }
 
         return bookingSaved;

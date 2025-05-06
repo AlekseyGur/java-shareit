@@ -23,4 +23,6 @@ public interface BookingService {
     BookingDto update(Long bookingId, BookingDto booking, Long userId) throws NotFoundException, AccessDeniedException;
 
     boolean checkIdExist(Long id);
+
+    boolean checkItemForBookerApproved(Long bookerId, Long itemId);
 }

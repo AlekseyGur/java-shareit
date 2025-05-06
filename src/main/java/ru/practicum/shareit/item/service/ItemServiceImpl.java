@@ -57,12 +57,12 @@ public class ItemServiceImpl implements ItemService {
                         .findByNameContainingIgnoreCaseAndAvailableTrueOrDescriptionContainingIgnoreCaseAndAvailableTrue(
                                 query,
                                 query));
-        return addComments(res);
+        return addCommentsAndBookings(res);
     }
 
     @Override
     public List<ItemDto> getByUserId(Long userId) {
-        return addComments(ItemMapper.toDto(itemRepository.findByOwnerId(userId)));
+        return addCommentsAndBookings(ItemMapper.toDto(itemRepository.findByOwnerId(userId)));
     }
 
     @Override
@@ -124,7 +124,7 @@ public class ItemServiceImpl implements ItemService {
         return itemSaved;
     }
 
-    private List<ItemDto> addComments(List<ItemDto> itemsDto) {
+    private List<ItemDto> addCommentsAndBookings(List<ItemDto> itemsDto) {
         List<Long> itemsIds = itemsDto.stream().map(ItemDto::getId).toList();
         List<CommentDto> comments = commentService.findByItemId(itemsIds);
 
@@ -140,6 +140,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private ItemDto addComments(ItemDto itemDto) {
-        return addComments(List.of(itemDto)).get(0);
+        return addCommentsAndBookings(List.of(itemDto)).get(0);
     }
 }

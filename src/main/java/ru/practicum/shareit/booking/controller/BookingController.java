@@ -34,11 +34,11 @@ public class BookingController {
     }
 
     @PatchMapping("/{bookingId}")
-    public void updateStatus(
+    public BookingDto updateStatus(
             @PathVariable Long bookingId,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId,
                     @RequestParam(required = false, defaultValue = "true") boolean approved) {
-        bookingService.updateStatus(bookingId, userId, approved);
+        return bookingService.updateStatus(bookingId, userId, approved);
     }
 
     @GetMapping("/{bookingId}")
@@ -49,14 +49,14 @@ public class BookingController {
     @GetMapping
     public List<BookingDto> getByUser(
             @RequestParam(required = false, defaultValue = "ALL") BookingStatus state,
-            @RequestParam Long userId) {
+            @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         return bookingService.getByBooker(userId, state);
     }
 
     @GetMapping("/owner")
     public List<BookingDto> getByOwner(
             @RequestParam(required = false, defaultValue = "ALL") BookingStatus state,
-            @RequestParam Long userId) {
+            @RequestHeader(value = "X-Sharer-User-Id", required = false) Long userId) {
         return bookingService.getByOwner(userId, state);
     }
 }

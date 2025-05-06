@@ -4,13 +4,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import ru.practicum.shareit.booking.interfaces.BookingService;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.comment.interfaces.CommentService;
 import ru.practicum.shareit.comment.repository.CommentRepository;
 import ru.practicum.shareit.system.exception.NotFoundException;
+import ru.practicum.shareit.system.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.comment.mapper.CommentMapper;
@@ -21,6 +25,10 @@ import ru.practicum.shareit.comment.model.Comment;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
+
+    @Autowired
+    @Lazy
+    private BookingService bookingService;
 
     @Override
     public List<CommentDto> getAll() {
@@ -40,6 +48,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto add(CommentDto commentDto) {
+        checkItemBookedAndApproved(commentDto.getAuthorId(), commentDto.getItemId());
         return save(commentDto);
     }
 
@@ -95,5 +104,12 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = CommentMapper.toComment(commentDto);
         CommentDto commentSaved = CommentMapper.toDto(commentRepository.save(comment));
         return addUserInfo(commentSaved);
+    }
+
+    private void checkItemBookedAndApproved(Long bookerId, Long itemId) {
+        if (!bookingService.checkItemForBookerApproved(bookerId, itemId)) {
+            throw new ValidationException(
+                    "Невозможно оставить комментарий. Текущий пользователь не брал эту вещь в аренду");
+        }
     }
 }

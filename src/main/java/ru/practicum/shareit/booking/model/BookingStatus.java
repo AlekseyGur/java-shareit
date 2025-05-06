@@ -2,9 +2,10 @@ package ru.practicum.shareit.booking.model;
 
 public enum BookingStatus {
     ALL,
-            CURRENT,
-    PAST,
+    CURRENT,
+            PAST,
     FUTURE,
     WAITING,
-    REJECTED
+    REJECTED,
+    APPROVED
 }

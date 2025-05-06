@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     end_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     item_id BIGINT REFERENCES items(id) ON DELETE CASCADE,
     booker_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
-    status TINYINT NOT NULL,
+    status SMALLINT NOT NULL,
     CONSTRAINT valid_dates CHECK (start_date < end_date)
 );
 

@@ -63,6 +63,7 @@ public class UtilsTests {
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
+            throw new RuntimeException("Interrupted while sleeping", e);
         }
 
         return saved;

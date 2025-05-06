@@ -46,9 +46,8 @@ public class ItemServiceTest {
         item.setName("name");
         item.setDescription("description");
         item.setAvailable(true);
-
-        assertThrows(Exception.class, 
-        () -> itemService.add(item, null),
+        assertThrows(Exception.class,
+                        () -> itemService.add(item, null),
                 "Надо указывать пользователя");
     }
 

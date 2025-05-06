@@ -70,7 +70,7 @@ class CommentServiceTest {
     void deleteSuccess() {
         CommentDto commentDto = addUserItemCommentGetComment();
         Long id = commentDto.getId();
-        assertTrue(commentService.get(id).getId() == id);
+        assertEquals(commentService.get(id).getId(), id);
         commentService.delete(id);
         assertThrows(RuntimeException.class, () -> commentService.get(id));
     }
@@ -99,21 +99,21 @@ class CommentServiceTest {
     void getByIdSuccess() {
         CommentDto commentDto = addUserItemCommentGetComment();
         Long id = commentDto.getId();
-        assertTrue(commentService.get(id).getId() == id);
+        assertEquals(commentService.get(id).getId(), id);
     }
 
     @Test
     void findByItemIdSuccess() {
         CommentDto commentDto = addUserItemCommentGetComment();
         Long id = commentDto.getId();
-        assertTrue(commentService.findByAuthorId(commentDto.getItemId()).get(0).getId() == id);
+        assertEquals(commentService.findByItemId(commentDto.getItemId()).get(0).getId(), id);
     }
 
     @Test
     void findByAuthorIdSuccess() {
         CommentDto commentDto = addUserItemCommentGetComment();
         Long id = commentDto.getId();
-        assertTrue(commentService.findByAuthorId(commentDto.getAuthorId()).get(0).getId() == id);
+        assertEquals(commentService.findByAuthorId(commentDto.getAuthorId()).get(0).getId(), id);
     }
 
     private CommentDto addUserItemCommentGetComment() {

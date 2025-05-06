@@ -116,8 +116,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item itemSaved = itemRepository.findById(itemId).get();
 
-        // Тут itemSaved.getOwnerId() != null требуют тесты постмана (но это нелогично!)
-        if (itemSaved.getOwnerId() != null && !itemSaved.getOwnerId().equals(userId)) {
+        if (itemSaved.getOwnerId() == null || !itemSaved.getOwnerId().equals(userId)) {
             throw new AccessDeniedException("Только владелец может редактировать вещь");
         }
 

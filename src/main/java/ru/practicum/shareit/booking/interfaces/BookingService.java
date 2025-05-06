@@ -12,6 +12,8 @@ public interface BookingService {
 
     List<BookingDto> getByBooker(Long userId, BookingStatus state);
 
+    List<BookingDto> getByBookerAndItemAndStatus(Long userId, Long itemId, BookingStatus state);
+
     List<BookingDto> getByOwner(Long userId, BookingStatus state);
 
     BookingDto add(BookingDto booking, Long userId);
@@ -24,5 +26,5 @@ public interface BookingService {
 
     boolean checkIdExist(Long id);
 
-    boolean checkItemForBookerApproved(Long bookerId, Long itemId);
+    boolean checkItemForBookerWithStatus(Long bookerId, Long itemId, BookingStatus status);
 }

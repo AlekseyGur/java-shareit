@@ -6,15 +6,14 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS requests (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    description TEXT NOT NULL, -- Change text to Varchar
-    requestor_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
-    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() -- delete this
+    description VARCHAR(1000) NOT NULL,
+    requestor_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS items (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT, -- Change text to Varchar
+    description VARCHAR(1000),
     is_available BOOLEAN NOT NULL,
     owner_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     request_id BIGINT REFERENCES requests(id) ON DELETE CASCADE
@@ -32,7 +31,7 @@ CREATE TABLE IF NOT EXISTS bookings (
 
 CREATE TABLE IF NOT EXISTS comments (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    text TEXT NOT NULL, -- Change text to Varchar
+    text VARCHAR(1000) NOT NULL,
     item_id BIGINT NOT NULL REFERENCES items(id) ON DELETE CASCADE,
     author_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()

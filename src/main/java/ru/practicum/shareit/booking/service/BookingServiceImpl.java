@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -60,6 +61,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<BookingDto> getByBookerAndItemAndStatus(Long userId, Long itemId, BookingStatus status) {
+        List<BookingDto> res = BookingMapper
+                .toDto(bookingRepository.getByBookerIdAndItemIdAndStatus(userId, itemId, status));
+
+        return setStatusPast(res);
+    }
+
+    @Override
     public List<BookingDto> getByOwner(Long userId, BookingStatus state) {
         if (userId == null || !userService.checkIdExist(userId)) {
             throw new NotFoundException("Пользователь с таким id не найден");
@@ -104,8 +113,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean checkItemForBookerApproved(Long bookerId, Long itemId) {
-        return bookingRepository.checkItemForBookerApproved(bookerId, itemId, BookingStatus.APPROVED.ordinal());
+    public boolean checkItemForBookerWithStatus(Long bookerId, Long itemId, BookingStatus status) {
+        return bookingRepository.checkItemForBookerWithStatus(bookerId, itemId, status.ordinal());
     }
 
     private void checkItemAndUserExist(Long bookingId, Long userId) {
@@ -164,7 +173,7 @@ public class BookingServiceImpl implements BookingService {
                 .map(BookingMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Бронь с таким id не найдена"));
 
-        return addBookingInfo(booking);
+        return setStatusPast(addBookingInfo(booking));
     }
 
     private List<BookingDto> addBookingInfo(List<BookingDto> bookings) {
@@ -192,4 +201,16 @@ public class BookingServiceImpl implements BookingService {
         return addBookingInfo(List.of(booking)).get(0);
     }
 
+    private List<BookingDto> setStatusPast(List<BookingDto> bookings) {
+        return bookings.stream().map(x -> {
+            if (x.getEnd().isBefore(LocalDateTime.now())) {
+                x.setStatus(BookingStatus.PAST);
+            }
+            return x;
+        }).toList();
+    }
+
+    private BookingDto setStatusPast(BookingDto booking) {
+        return setStatusPast(List.of(booking)).get(0);
+    }
 }

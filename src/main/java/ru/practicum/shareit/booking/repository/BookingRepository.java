@@ -17,6 +17,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> getByBookerIdAndStatus(Long userId, BookingStatus state);
 
+    List<Booking> getByBookerIdAndItemIdAndStatus(Long userId, Long itemId, BookingStatus state);
+
     @Query(value = """
             SELECT EXISTS (
                 SELECT 1
@@ -26,7 +28,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                 AND status = :statusId
                 LIMIT 1
             )""", nativeQuery = true)
-    Boolean checkItemForBookerApproved(
+    Boolean checkItemForBookerWithStatus(
             @Param("bookerId") Long bookerId,
             @Param("itemId") Long itemId,
             @Param("statusId") Integer statusId);

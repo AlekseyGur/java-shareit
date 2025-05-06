@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.comment.interfaces.CommentService;
 import ru.practicum.shareit.comment.repository.CommentRepository;
@@ -107,9 +109,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void checkItemBookedAndApproved(Long bookerId, Long itemId) {
-        if (!bookingService.checkItemForBookerApproved(bookerId, itemId)) {
+        List<BookingDto> bookings = bookingService.getByBookerAndItemAndStatus(bookerId, itemId,
+                BookingStatus.APPROVED);
+        if (bookings.isEmpty()) {
             throw new ValidationException(
-                    "Невозможно оставить комментарий. Текущий пользователь не брал эту вещь в аренду");
+                    "Чтобы оставить комментарий, нужно взять вещь в аренду");
+        }
+        if (!bookings.get(0).getStatus().equals(BookingStatus.PAST)) {
+            throw new ValidationException(
+                    "Чтобы оставить комментарий, нужно дождаться, пока закончится срок аренды");
         }
     }
 }

@@ -1,17 +1,19 @@
 package ru.practicum.shareit.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.practicum.shareit.user.UniqueConstraint;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class UserDto {
     private Long id;
+
+    @Size(min = 2, max = 255)
     private String name;
 
-    @UniqueConstraint
+    @Email
+    @Size(min = 2, max = 255)
     private String email;
 }

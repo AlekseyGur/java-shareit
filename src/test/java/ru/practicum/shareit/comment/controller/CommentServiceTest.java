@@ -52,7 +52,7 @@ class CommentServiceTest {
 
         List<CommentDto> commentsSaved = commentService.getAll();
         assertTrue(commentsSaved.size() > 0);
-        assertTrue(commentsSaved.contains(commentDto));
+        assertTrue(!commentsSaved.stream().filter(x -> x.getText().equals(commentDto.getText())).toList().isEmpty());
 
     }
 
@@ -90,9 +90,12 @@ class CommentServiceTest {
         CommentDto commentDto2 = addUserItemCommentGetComment();
         CommentDto commentDto3 = addUserItemCommentGetComment();
         List<CommentDto> commentsSaved = commentService.getAll();
-        assertTrue(commentsSaved.contains(commentDto1));
-        assertTrue(commentsSaved.contains(commentDto2));
-        assertTrue(commentsSaved.contains(commentDto3));
+
+        assertTrue(!commentsSaved.stream().filter(x -> x.getText().equals(commentDto1.getText())).toList().isEmpty());
+
+        assertTrue(!commentsSaved.stream().filter(x -> x.getText().equals(commentDto2.getText())).toList().isEmpty());
+
+        assertTrue(!commentsSaved.stream().filter(x -> x.getText().equals(commentDto3.getText())).toList().isEmpty());
     }
 
     @Test

@@ -1,14 +1,14 @@
 package ru.practicum.shareit.request.model;
 
 import java.time.LocalDateTime;
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "requests")
 public class Request {
@@ -16,12 +16,16 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 1000)
+    @NotNull
+    @Size(min = 2, max = 1000)
     private String description;
 
     @Column(name = "requestor_id", nullable = false)
+    @NotNull
     private Long requestorId;
 
     @Column(name = "created_at")
+    @NotNull
     private LocalDateTime createdAt;
 }

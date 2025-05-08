@@ -8,6 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 
@@ -22,8 +25,13 @@ public class User implements Serializable {
     private Long id;
 
     @Column(nullable = false, length = 255)
+    @NotNull
+    @Size(min = 2, max = 255)
     private String name;
 
     @Column(unique = true, nullable = false, length = 255)
+    @NotNull
+    @Email
+    @Size(min = 5, max = 255)
     private String email;
 }

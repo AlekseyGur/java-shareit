@@ -1,6 +1,5 @@
 package ru.practicum.shareit.user.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.Column;
@@ -16,7 +15,6 @@ import java.io.Serializable;
 @Setter
 @Entity
 @Table(name = "users")
-@EqualsAndHashCode(of = { "email" })
 public class User implements Serializable {
 
     @Id

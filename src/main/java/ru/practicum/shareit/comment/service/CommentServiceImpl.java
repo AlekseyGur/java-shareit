@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
@@ -25,6 +25,7 @@ import ru.practicum.shareit.comment.model.Comment;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
@@ -102,10 +103,12 @@ public class CommentServiceImpl implements CommentService {
                 }).toList();
     }
 
+    @Transactional
     private CommentDto addUserInfo(CommentDto comment) {
         return addUserInfo(List.of(comment)).get(0);
     }
 
+    @Transactional
     private CommentDto save(CommentDto commentDto) {
         Comment comment = CommentMapper.toComment(commentDto);
         CommentDto commentSaved = CommentMapper.toDto(commentRepository.save(comment));

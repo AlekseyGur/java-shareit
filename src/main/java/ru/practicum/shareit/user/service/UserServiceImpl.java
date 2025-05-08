@@ -3,8 +3,8 @@ package ru.practicum.shareit.user.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.system.exception.ConstraintViolationException;
 import ru.practicum.shareit.system.exception.DuplicatedDataException;
@@ -17,6 +17,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 

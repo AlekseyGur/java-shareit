@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.comment.interfaces.CommentService;
@@ -24,7 +25,7 @@ public class CommentController {
     public CommentDto addComment(
             @PathVariable Long itemId,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId,
-            @RequestBody CommentDto comment) {
+            @Valid @RequestBody CommentDto comment) {
         comment.setAuthorId(userId);
         comment.setItemId(itemId);
         return commentService.add(comment);

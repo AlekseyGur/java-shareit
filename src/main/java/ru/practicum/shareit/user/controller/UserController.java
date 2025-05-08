@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -30,14 +31,15 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public UserDto add(@RequestBody UserDto user) {
+    public UserDto add(@Valid @RequestBody UserDto user) {
         Validate.user(user);
         return userService.save(user);
     }
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto patch(@PathVariable Long userId, @RequestBody UserDto user) {
+    public UserDto patch(@PathVariable Long userId,
+            @Valid @RequestBody UserDto user) {
         user.setId(userId);
         Validate.user(user);
         return userService.patch(user);

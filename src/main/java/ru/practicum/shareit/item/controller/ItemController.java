@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
@@ -35,8 +36,8 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public ItemDto add(
-            @RequestBody ItemDto item,
-                    @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
+            @Valid @RequestBody ItemDto item,
+                            @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         item.setOwnerId(userId);
         Validate.itemDto(item);
         return itemService.add(item, userId);
@@ -58,8 +59,8 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public ItemDto patch(
             @PathVariable Long itemId,
-            @RequestBody ItemDto item,
-            @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
+            @Valid @RequestBody ItemDto item,
+                    @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         item.setId(itemId);
         item.setOwnerId(userId);
         return itemService.patch(item, userId);

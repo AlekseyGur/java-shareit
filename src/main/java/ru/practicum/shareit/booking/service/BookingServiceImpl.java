@@ -146,7 +146,7 @@ public class BookingServiceImpl implements BookingService {
     private Booking checkAccessForUpdateAndGetBooking(Long bookingId, Long userId) {
         Booking bookingSaved = checkBookingAndUserExistReturnBooking(bookingId, userId);
 
-        if (bookingSaved.getBookerId() != userId) {
+        if (!bookingSaved.getBookerId().equals(userId)) {
             throw new AccessDeniedException("Только владелец заказа может редактировать заказ");
         }
 
@@ -157,7 +157,7 @@ public class BookingServiceImpl implements BookingService {
         Booking bookingSaved = checkBookingAndUserExistReturnBooking(bookingId, userId);
         Long itemOwnerId = itemService.get(bookingSaved.getItemId()).getOwnerId();
 
-        if (itemOwnerId != userId) {
+        if (!itemOwnerId.equals(userId)) {
             throw new AccessDeniedException("Только владелец вещи может одобрить заказ");
         }
 

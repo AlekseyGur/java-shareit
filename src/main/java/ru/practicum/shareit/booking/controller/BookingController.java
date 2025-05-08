@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
@@ -26,8 +27,8 @@ public class BookingController {
 
     @PostMapping
     public BookingDto add(
-            @RequestBody BookingDto bookingDto,
-            @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
+            @Valid @RequestBody BookingDto bookingDto,
+                    @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) {
         bookingDto.setBookerId(userId);
         BookingValidate.bookingDto(bookingDto);
         return bookingService.add(bookingDto, userId);

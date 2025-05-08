@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -26,9 +27,11 @@ public class Item {
     private Boolean available;
 
     @NotNull
+    @Positive
     @Column(name = "owner_id", nullable = false)
     private Long ownerId;
 
+    @Positive
     @Column(name = "request_id")
     private Long requestId;
 }

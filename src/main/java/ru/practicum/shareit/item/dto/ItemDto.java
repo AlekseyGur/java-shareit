@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import java.util.List;
 
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,11 @@ public class ItemDto {
     @Size(max = 1000)
     private String description;
     private Boolean available;
+
+    @Positive
     private Long ownerId;
+
+    @Positive
     private Long requestId;
 
     private List<CommentDto> comments;

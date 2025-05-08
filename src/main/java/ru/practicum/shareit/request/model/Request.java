@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @Getter
@@ -23,6 +24,7 @@ public class Request {
 
     @Column(name = "requestor_id", nullable = false)
     @NotNull
+    @Positive
     private Long requestorId;
 
     @Column(name = "created_at")

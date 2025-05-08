@@ -46,8 +46,8 @@ public class UserServiceTest {
         user.setName("");
         user.setEmail(genEmail());
 
-        UserDto userSaved = userController.add(user);
-        assertTrue(userSaved.getId() > 0, "Пользователь должен добавиться");
+        assertThrows(Exception.class, () -> userController.add(user),
+                "Пользователь НЕ должен добавиться");
     }
 
     @Test

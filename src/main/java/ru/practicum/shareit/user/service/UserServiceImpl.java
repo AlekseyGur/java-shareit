@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.system.exception.ConstraintViolationException;
 import ru.practicum.shareit.system.exception.DuplicatedDataException;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto save(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
 
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
@@ -61,6 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto patch(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
 

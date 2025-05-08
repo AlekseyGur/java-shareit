@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
@@ -49,17 +50,20 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentDto add(CommentDto commentDto) {
         checkItemBookedAndApproved(commentDto.getAuthorId(), commentDto.getItemId());
         return save(commentDto);
     }
 
     @Override
+    @Transactional
     public CommentDto update(CommentDto commentDto) {
         return save(commentDto);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         commentRepository.deleteById(id);
     }

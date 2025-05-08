@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.system.exception.AccessDeniedException;
 import ru.practicum.shareit.system.exception.NotFoundException;
@@ -31,6 +32,7 @@ public class BookingServiceImpl implements BookingService {
     private final ItemService itemService;
 
     @Override
+    @Transactional
     public BookingDto add(BookingDto booking, Long userId) {
         checkItemAndUserExist(booking.getItemId(), userId);
 
@@ -79,6 +81,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public BookingDto updateStatus(Long bookingId, Long userId, boolean approved) {
         Booking bookingSaved = checkAccessForStatusChangeAndGetBooking(bookingId, userId);
 
@@ -92,11 +95,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         bookingRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public BookingDto update(Long bookingId, BookingDto booking, Long userId) {
         Booking bookingSaved = checkAccessForUpdateAndGetBooking(bookingId, userId);
 

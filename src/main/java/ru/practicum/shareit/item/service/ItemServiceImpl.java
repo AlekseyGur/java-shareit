@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.comment.interfaces.CommentService;
@@ -26,6 +27,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentService commentService;
 
     @Override
+    @Transactional
     public ItemDto add(ItemDto itemDto, Long userId) {
         if (!userService.checkIdExist(userId)) {
             throw new NotFoundException("Пользователь с таким id не найден");
@@ -66,11 +68,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         itemRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public ItemDto patch(ItemDto itemDto, Long userId) {
         Item itemSaved = checkAccess(itemDto, userId);
 
@@ -94,6 +98,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public boolean isItemAvailable(Long itemId) {
         return itemRepository.findAvailableByItemId(itemId);
     }

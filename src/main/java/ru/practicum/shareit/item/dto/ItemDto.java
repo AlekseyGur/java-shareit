@@ -2,14 +2,12 @@ package ru.practicum.shareit.item.dto;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import ru.practicum.shareit.comment.dto.CommentDto;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class ItemDto {
     private Long id;
     private String name;

@@ -9,14 +9,14 @@ import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.item.model.Item;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    @Query("SELECT i.available FROM Item i WHERE i.id = :itemId")
-    Boolean findAvailableByItemId(@Param("itemId") Long itemId);
+        @Query("SELECT i.available FROM Item i WHERE i.id = :itemId")
+        Boolean findAvailableByItemId(@Param("itemId") Long itemId);
 
-    List<Item> getByIdIn(List<Long> itemIds);
+        List<Item> getByIdIn(List<Long> itemIds);
 
-    List<Item> findByOwnerId(Long ownerId);
+        List<Item> findByOwnerId(Long ownerId);
 
-    List<Item> findByNameContainingIgnoreCaseAndAvailableTrueOrDescriptionContainingIgnoreCaseAndAvailableTrue(
-            String name,
-                    String description);
+        List<Item> findByNameContainingIgnoreCaseAndAvailableTrueOrDescriptionContainingIgnoreCaseAndAvailableTrue(
+                        String name,
+                        String description);
 }

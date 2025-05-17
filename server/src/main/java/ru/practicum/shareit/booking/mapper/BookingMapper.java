@@ -5,7 +5,6 @@ import java.util.List;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.mapper.BookingMapper;
 
 @UtilityClass
 public class BookingMapper {

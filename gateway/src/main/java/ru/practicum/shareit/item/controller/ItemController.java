@@ -46,10 +46,10 @@ public class ItemController {
         return itemClient.add(item, userId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> get(@PathVariable Long id) {
-        return itemClient.get(id);
+    public ResponseEntity<Object> get(@PathVariable Long itemId) {
+        return itemClient.get(itemId);
     }
 
     @DeleteMapping("/{id}")

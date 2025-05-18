@@ -35,7 +35,9 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> get(Long id) {
-        return get("/" + id, null, null);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("id", id);
+        return get("/{id}", null, parameters);
     }
 
     public ResponseEntity<Object> patch(ItemDto itemDto, long userId) {

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import ru.practicum.shareit.ShareItApp;
 import ru.practicum.shareit.UtilsTests;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
@@ -13,7 +14,6 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.comment.interfaces.CommentService;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
-import ru.practicum.shareit.system.config.ShareItApp;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 

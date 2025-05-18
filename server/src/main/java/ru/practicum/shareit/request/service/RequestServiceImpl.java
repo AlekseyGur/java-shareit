@@ -6,21 +6,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.request.dto.RequestDto;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.request.interfaces.RequestService;
 import ru.practicum.shareit.request.mapper.RequestMapper;
 import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.system.exception.NotFoundException;
+import ru.practicum.shareit.user.interfaces.UserService;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
     public RequestDto add(Long userId, String text) {
-        return RequestMapper.toDto(requestRepository.save(userId, text));
+        if (!userService.checkIdExist(userId)) {
+            throw new NotFoundException("Пользователь с таким id не найден");
+        }
+
+        Request request = new Request();
+        request.setRequestorId(userId);
+        request.setDescription(text);
+
+        return RequestMapper.toDto(requestRepository.save(request));
     }
 
     @Override

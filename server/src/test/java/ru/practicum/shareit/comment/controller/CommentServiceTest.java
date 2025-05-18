@@ -1,5 +1,6 @@
 package ru.practicum.shareit.comment.controller;
 
+import ru.practicum.shareit.ShareItApp;
 import ru.practicum.shareit.UtilsTests;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.interfaces.BookingService;
@@ -7,7 +8,6 @@ import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.comment.interfaces.CommentService;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
-import ru.practicum.shareit.system.config.ShareItApp;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.interfaces.UserService;
 import org.junit.jupiter.api.BeforeEach;

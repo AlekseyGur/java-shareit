@@ -1,5 +1,8 @@
 package ru.practicum.shareit.item;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +47,8 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> findAvailableByNameOrDescription(String text) {
-        return get("/search?text=" + text, null, null);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("text", text);
+        return get("/search?text={text}", null, parameters);
     }
 }

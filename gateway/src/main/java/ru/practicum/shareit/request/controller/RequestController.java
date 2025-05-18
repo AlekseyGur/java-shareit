@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.controller;
 
-import java.util.List;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,36 +12,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import ru.practicum.shareit.request.dto.RequestDto;
-import ru.practicum.shareit.request.interfaces.RequestService;
+import ru.practicum.shareit.request.RequestClient;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/requests")
 @Validated
-public class ItemRequestController {
-    private final RequestService requestService;
+public class RequestController {
+    private final RequestClient requestClient;
 
     @PostMapping
-    public RequestDto createRequest(
+    public ResponseEntity<Object> createRequest(
             @RequestBody String text,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
-        return requestService.add(userId, text);
+        return requestClient.add(userId, text);
     }
 
     @GetMapping
-    public List<RequestDto> getByUserId(
+    public ResponseEntity<Object> getByUserId(
             @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
-        return requestService.getByUserId(userId);
+        return requestClient.getByUserId(userId);
     }
 
     @GetMapping("/all")
-    public List<RequestDto> getAll() {
-        return requestService.getAll();
+    public ResponseEntity<Object> getAll() {
+        return requestClient.getAll();
     }
 
     @GetMapping("/{requestId}")
-    public RequestDto getById(@PathVariable Long requestId) {
-        return requestService.get(requestId);
+    public ResponseEntity<Object> getById(@PathVariable Long requestId) {
+        return requestClient.get(requestId);
     }
 }

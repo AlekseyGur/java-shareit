@@ -27,8 +27,7 @@ public class UserClient extends BaseClient {
     }
 
     public ResponseEntity<Object> save(UserDto userDto) {
-        long userId = userDto.getId();
-        return post("/" + userId, userId, userDto);
+        return post("", null, null, userDto);
     }
 
     public ResponseEntity<Object> patch(UserDto userDto) {

@@ -27,7 +27,6 @@ public class Request {
     @Positive
     private Long requestorId;
 
-    @Column(name = "created_at")
-    @NotNull
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private LocalDateTime created;
 }

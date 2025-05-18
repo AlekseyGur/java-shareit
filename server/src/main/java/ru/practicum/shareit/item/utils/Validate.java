@@ -12,7 +12,7 @@ public class Validate {
             throw new ValidationException("Укажите владельца");
         }
 
-        if (item.getName() != null && item.getName().isBlank()) {
+        if (item.getName() == null || item.getName().isBlank()) {
             throw new ValidationException("Укажите название");
         }
 

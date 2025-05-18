@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
         ItemDto itemDto = itemRepository.findById(id)
                 .map(ItemMapper::toDto)
                 .orElseThrow(() -> new NotFoundException("Вещь с таким id не найдена"));
-        return addComments(itemDto);
+        return addCommentsAndBookings(itemDto);
     }
 
     @Override
@@ -99,6 +99,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<ItemDto> getByRequestIds(List<Long> requestIds) {
+        return itemRepository.findByRequestIdIn(requestIds).stream()
+                .map(ItemMapper::toDto).toList();
+    }
+
+    @Override
     @Transactional
     public boolean isItemAvailable(Long itemId) {
         return itemRepository.findAvailableByItemId(itemId);
@@ -144,7 +150,7 @@ public class ItemServiceImpl implements ItemService {
                 }).toList();
     }
 
-    private ItemDto addComments(ItemDto itemDto) {
+    private ItemDto addCommentsAndBookings(ItemDto itemDto) {
         return addCommentsAndBookings(List.of(itemDto)).get(0);
     }
 }

@@ -13,7 +13,7 @@ public class RequestMapper {
         requestDto.setId(request.getId());
         requestDto.setDescription(request.getDescription());
         requestDto.setRequestorId(request.getRequestorId());
-        requestDto.setCreatedAt(request.getCreatedAt());
+        requestDto.setCreated(request.getCreated());
         return requestDto;
     }
 
@@ -22,7 +22,7 @@ public class RequestMapper {
         request.setId(requestDto.getId());
         request.setDescription(requestDto.getDescription());
         request.setRequestorId(requestDto.getRequestorId());
-        request.setCreatedAt(requestDto.getCreatedAt());
+        request.setCreated(requestDto.getCreated());
         return request;
     }
 

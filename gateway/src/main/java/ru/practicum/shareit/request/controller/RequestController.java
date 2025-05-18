@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.request.RequestClient;
+import ru.practicum.shareit.request.dto.RequestDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +24,9 @@ public class RequestController {
 
     @PostMapping
     public ResponseEntity<Object> createRequest(
-            @RequestBody String text,
-            @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
-        return requestClient.add(userId, text);
+            @RequestBody RequestDto requestDto,
+                    @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
+        return requestClient.add(userId, requestDto.getDescription());
     }
 
     @GetMapping

@@ -32,6 +32,6 @@ public class CommentController {
             @Valid @RequestBody CommentDto comment) {
         comment.setAuthorId(userId);
         comment.setItemId(itemId);
-        return commentClient.add(comment);
+        return commentClient.add(userId, itemId, comment);
     }
 }

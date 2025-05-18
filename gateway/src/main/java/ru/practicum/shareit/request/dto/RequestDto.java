@@ -20,5 +20,5 @@ public class RequestDto {
     @NotNull
     @Positive
     private Long requestorId;
-    private LocalDateTime createdAt;
+    private LocalDateTime created;
 }

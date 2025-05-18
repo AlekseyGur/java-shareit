@@ -9,6 +9,8 @@ public interface ItemService {
 
     ItemDto get(Long id);
 
+    List<ItemDto> getByRequestIds(List<Long> requestIds);
+
     List<ItemDto> get(List<Long> ids);
 
     boolean isItemAvailable(Long itemId);

@@ -1,13 +1,12 @@
 package ru.practicum.shareit.item;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import ru.practicum.shareit.client.BaseClient;
@@ -29,13 +28,11 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> add(ItemDto itemDto, Long userId) {
-        return post("", userId, itemDto);
+        return post("", userId, null, itemDto);
     }
 
     public ResponseEntity<Object> get(Long id) {
-        Map<String, Object> parameters = Map.of(
-                "id", id);
-        return get("/search", null, parameters);
+        return get("/" + id, null, null);
     }
 
     public ResponseEntity<Object> patch(ItemDto itemDto, long userId) {
@@ -47,8 +44,6 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> findAvailableByNameOrDescription(String text) {
-        Map<String, Object> parameters = Map.of(
-                "text", text);
-        return get("/search", null, parameters);
+        return get("/search?text=" + text, null, null);
     }
 }

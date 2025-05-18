@@ -22,8 +22,8 @@ public class CommentClient extends BaseClient {
                         .build());
     }
 
-    public ResponseEntity<Object> add(CommentDto comment) {
-        return post("/" + comment.getId() + "/comment", comment.getAuthorId(), comment);
+    public ResponseEntity<Object> add(Long userId, Long itemId, CommentDto comment) {
+        return post("/" + itemId + "/comment", userId, comment);
     }
 
 }

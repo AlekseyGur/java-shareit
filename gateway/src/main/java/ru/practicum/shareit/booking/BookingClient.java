@@ -26,24 +26,11 @@ public class BookingClient extends BaseClient {
         );
     }
 
-    // public ResponseEntity<Object> getBookings(long userId, BookingState state,
-    // Integer from, Integer size) {
-    // Map<String, Object> parameters = Map.of(
-    // "state", state.name(),
-    // "from", from,
-    // "size", size
-    // );
-    // return get("?state={state}&from={from}&size={size}", userId, parameters);
-    // }
-
     public ResponseEntity<Object> add(BookingDto bookingDto, Long userId) {
         return post("", userId, null, bookingDto);
     }
 
     public ResponseEntity<Object> updateStatus(Long bookingId, Long userId, Boolean approved) {
-        // Map<String, Object> parameters = new HashMap<>();
-        // parameters.put("approved", approved);
-
         return patch("/" + bookingId + "?approved=" + approved, userId, null);
     }
 

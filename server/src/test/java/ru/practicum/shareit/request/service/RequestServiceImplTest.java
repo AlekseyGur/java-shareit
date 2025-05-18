@@ -45,7 +45,7 @@ public class RequestServiceImplTest {
     }
 
     @Test
-    void testAdd_Success() {
+    void testAddSuccess() {
         Long userId = 1L;
         String description = "Test request";
         Request request = new Request();
@@ -70,7 +70,7 @@ public class RequestServiceImplTest {
     }
 
     @Test
-    void testAdd_UserNotFound() {
+    void testAddUserNotFound() {
         Long userId = 1L;
         String description = "Test request";
 
@@ -85,7 +85,7 @@ public class RequestServiceImplTest {
     }
 
     @Test
-    void testGet_Success() {
+    void testGetSuccess() {
         Long requestId = 1L;
         Request request = new Request();
         request.setId(requestId);
@@ -102,7 +102,7 @@ public class RequestServiceImplTest {
     }
 
     @Test
-    void testGet_NotFound() {
+    void testGetNotFound() {
         Long requestId = 1L;
 
         when(requestRepository.findById(requestId)).thenReturn(Optional.empty());
@@ -115,7 +115,7 @@ public class RequestServiceImplTest {
     }
 
     @Test
-    void testGetAll_Success() {
+    void testGetAllSuccess() {
         Request request1 = new Request();
         request1.setId(1L);
         request1.setDescription("Request 1");
@@ -133,7 +133,7 @@ public class RequestServiceImplTest {
     }
 
     @Test
-    void testGetByUserId_Success() {
+    void testGetByUserIdSuccess() {
         Long userId = 1L;
         Request request1 = new Request();
         request1.setId(1L);
@@ -156,7 +156,7 @@ public class RequestServiceImplTest {
     }
 
     @Test
-    void testGetByUserId_NoRequests() {
+    void testGetByUserIdNoRequests() {
         Long userId = 1L;
 
         when(requestRepository.getByRequestorId(userId))

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.item.ItemClient;
@@ -50,7 +51,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ItemDto> get(@PathVariable Long itemId) {
+    public ResponseEntity<ItemDto> get(@PathVariable @Positive Long itemId) {
         return itemClient.get(itemId);
     }
 
@@ -63,8 +64,8 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ItemDto> patch(
-            @PathVariable Long itemId,
-            @Valid @RequestBody ItemDto item,
+            @PathVariable @Positive Long itemId,
+                    @Valid @RequestBody ItemDto item,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
         item.setId(itemId);
         item.setOwnerId(userId);
@@ -73,7 +74,7 @@ public class ItemController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<ItemDto>> search(@RequestParam String text) {
+    public ResponseEntity<List<ItemDto>> search(@RequestParam @NotBlank String text) {
         return itemClient.findAvailableByNameOrDescription(text);
     }
 }

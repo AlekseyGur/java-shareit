@@ -43,7 +43,7 @@ public class RequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<RequestDto> getById(@PathVariable Long requestId) {
+    public ResponseEntity<RequestDto> getById(@PathVariable @Positive Long requestId) {
         return requestClient.get(requestId);
     }
 }

@@ -48,7 +48,7 @@ public class BookingController {
 	}
 
 	@GetMapping("/{bookingId}")
-	public ResponseEntity<BookingDto> get(@PathVariable Long bookingId) {
+	public ResponseEntity<BookingDto> get(@PathVariable @Positive Long bookingId) {
 		return bookingClient.get(bookingId);
 	}
 

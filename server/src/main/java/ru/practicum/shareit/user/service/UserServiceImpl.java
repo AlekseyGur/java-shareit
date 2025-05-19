@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import ru.practicum.shareit.system.exception.ConstraintViolationException;
 import ru.practicum.shareit.system.exception.DuplicatedDataException;
 import ru.practicum.shareit.system.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -38,11 +37,12 @@ public class UserServiceImpl implements UserService {
     public UserDto save(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
 
-        if (user.getEmail() == null) {
-            throw new ConstraintViolationException("Нужно указать email пользователя");
-        }
         if (checkEmailExist(user.getEmail())) {
             throw new DuplicatedDataException("Пользователь с таким email уже существует");
+        }
+
+        if (user.getName() != null && user.getName().isBlank()) {
+            user.setName("Unnamed");
         }
 
         return UserMapper.toDto(userRepository.save(user));
@@ -80,11 +80,11 @@ public class UserServiceImpl implements UserService {
         Long id = user.getId();
         User userSaved = userRepository.findById(id).get();
 
-        if (user.getEmail() != null) {
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
             userSaved.setEmail(user.getEmail());
         }
 
-        if (user.getName() != null) {
+        if (user.getName() != null && !user.getName().isBlank()) {
             userSaved.setName(user.getName());
         }
 

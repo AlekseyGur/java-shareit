@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import ru.practicum.shareit.system.client.BaseClient;
 import ru.practicum.shareit.system.client.ConvertResponse;
+import ru.practicum.shareit.user.dto.NewUserDto;
+import ru.practicum.shareit.user.dto.PatchUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
 @Service
@@ -21,11 +23,11 @@ public class UserClient extends BaseClient {
         return convertResponse.toEntity(get("/" + userId, null, null), UserDto.class);
     }
 
-    public ResponseEntity<UserDto> save(UserDto userDto) {
+    public ResponseEntity<UserDto> save(NewUserDto userDto) {
         return convertResponse.toEntity(post("", null, null, userDto), UserDto.class);
     }
 
-    public ResponseEntity<UserDto> patch(UserDto userDto) {
+    public ResponseEntity<UserDto> patch(PatchUserDto userDto) {
         long userId = userDto.getId();
         return convertResponse.toEntity(patch("/" + userId, userId, userDto), UserDto.class);
     }

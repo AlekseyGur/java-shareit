@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.user.UserClient;
+import ru.practicum.shareit.user.dto.NewUserDto;
+import ru.practicum.shareit.user.dto.PatchUserDto;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.utils.Validate;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,17 +35,15 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UserDto> add(@Valid @RequestBody UserDto user) {
-        Validate.user(user);
+    public ResponseEntity<UserDto> add(@Valid @RequestBody NewUserDto user) {
         return userClient.save(user);
     }
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserDto> patch(@PathVariable Long userId,
-                    @Valid @RequestBody UserDto user) {
+            @Valid @RequestBody PatchUserDto user) {
         user.setId(userId);
-        Validate.user(user);
         return userClient.patch(user);
     }
 

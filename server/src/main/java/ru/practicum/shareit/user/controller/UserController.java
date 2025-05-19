@@ -16,7 +16,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.user.interfaces.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.utils.Validate;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +33,6 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public UserDto add(@Valid @RequestBody UserDto user) {
-        Validate.user(user);
         return userService.save(user);
     }
 
@@ -43,7 +41,6 @@ public class UserController {
     public UserDto patch(@PathVariable Long userId,
             @Valid @RequestBody UserDto user) {
         user.setId(userId);
-        Validate.user(user);
         return userService.patch(user);
     }
 

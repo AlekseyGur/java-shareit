@@ -8,11 +8,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.system.exception.GatewayException;
 
 @Component
-@Slf4j
 public class ConvertResponse {
     private final ObjectMapper mapper;
 
@@ -32,10 +30,10 @@ public class ConvertResponse {
                         .headers(source.getHeaders())
                         .body(body);
             } catch (JsonProcessingException e) {
-                throw new GatewayException(source.getStatusCode(), source.getHeaders(), source.getBody());
+                throw new GatewayException(source);
             }
         }
-        throw new GatewayException(source.getStatusCode(), source.getHeaders(), source.getBody());
+        throw new GatewayException(source);
     }
 
     public <T> ResponseEntity<T> toEntity(ResponseEntity<Object> source, TypeReference<T> targetType) {
@@ -48,9 +46,9 @@ public class ConvertResponse {
                         .headers(source.getHeaders())
                         .body(body);
             } catch (JsonProcessingException e) {
-                throw new GatewayException(source.getStatusCode(), source.getHeaders(), source.getBody());
+                throw new GatewayException(source);
             }
         }
-        throw new GatewayException(source.getStatusCode(), source.getHeaders(), source.getBody());
+        throw new GatewayException(source);
     }
 }

@@ -21,7 +21,6 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.interfaces.ItemService;
-import ru.practicum.shareit.item.utils.Validate;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,7 +42,6 @@ public class ItemController {
             @Valid @RequestBody ItemDto item,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
         item.setOwnerId(userId);
-        Validate.itemDto(item);
         return itemService.add(item, userId);
     }
 

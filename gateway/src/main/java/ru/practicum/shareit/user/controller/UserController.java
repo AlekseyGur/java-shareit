@@ -28,21 +28,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> get(@PathVariable Long id) {
+    public ResponseEntity<UserDto> get(@PathVariable Long id) {
         return userClient.get(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> add(@Valid @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> add(@Valid @RequestBody UserDto user) {
         Validate.user(user);
         return userClient.save(user);
     }
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> patch(@PathVariable Long userId,
-            @Valid @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> patch(@PathVariable Long userId,
+                    @Valid @RequestBody UserDto user) {
         user.setId(userId);
         Validate.user(user);
         return userClient.patch(user);

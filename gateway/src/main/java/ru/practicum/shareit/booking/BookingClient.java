@@ -1,52 +1,53 @@
 package ru.practicum.shareit.booking;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
+import com.fasterxml.jackson.core.type.TypeReference;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.BookingStatus;
-
-import ru.practicum.shareit.client.BaseClient;
+import ru.practicum.shareit.system.client.BaseClient;
+import ru.practicum.shareit.system.client.ConvertResponse;
 
 @Service
 public class BookingClient extends BaseClient {
-    private static final String API_PREFIX = "/bookings";
+    ConvertResponse convertResponse;
 
-    public BookingClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(
-                builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
-                        .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
-                        .build()
-        );
+    public BookingClient(@Value("${shareit-server.url}") String serverUrl, ConvertResponse convertResponse) {
+        super(serverUrl, "/bookings");
+        this.convertResponse = convertResponse;
     }
 
-    public ResponseEntity<Object> add(BookingDto bookingDto, Long userId) {
-        return post("", userId, null, bookingDto);
+    public ResponseEntity<BookingDto> add(BookingDto bookingDto, Long userId) {
+        return convertResponse.toEntity(post("", userId, null, bookingDto), new TypeReference<BookingDto>() {
+        });
     }
 
-    public ResponseEntity<Object> updateStatus(Long bookingId, Long userId, Boolean approved) {
-        return patch("/" + bookingId + "?approved=" + approved, userId, null);
+    public ResponseEntity<BookingDto> updateStatus(Long bookingId, Long userId, Boolean approved) {
+        return convertResponse.toEntity(patch("/" + bookingId + "?approved=" + approved, userId, null),
+                BookingDto.class);
     }
 
-    public ResponseEntity<Object> get(long bookingId) {
-        return get("/" + bookingId, null, null);
+    public ResponseEntity<BookingDto> get(long bookingId) {
+        return convertResponse.toEntity(get("/" + bookingId, null, null), BookingDto.class);
     }
 
-    public ResponseEntity<Object> getByBooker(Long userId, BookingStatus state) {
+    public ResponseEntity<List<BookingDto>> getByBooker(Long userId, BookingStatus state) {
         Map<String, Object> parameters = Map.of(
                 "state", state.name());
-        return get("?state={state}", userId, parameters);
+        return convertResponse.toEntity(get("?state={state}", userId, parameters),
+                new TypeReference<List<BookingDto>>() {
+                });
     }
 
-    public ResponseEntity<Object> getByOwner(Long userId, BookingStatus state) {
+    public ResponseEntity<List<BookingDto>> getByOwner(Long userId, BookingStatus state) {
         Map<String, Object> parameters = Map.of(
                 "state", state.name());
-        return get("/owner?state={state}", userId, parameters);
+        return convertResponse.toEntity(get("/owner?state={state}", userId, parameters),
+                new TypeReference<List<BookingDto>>() {
+                });
     }
 }

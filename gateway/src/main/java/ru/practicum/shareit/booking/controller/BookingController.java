@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +31,7 @@ public class BookingController {
 	private final BookingClient bookingClient;
 
 	@PostMapping
-	public ResponseEntity<Object> add(
+	public ResponseEntity<BookingDto> add(
 			@Valid @RequestBody BookingDto bookingDto,
 			@RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
 		bookingDto.setBookerId(userId);
@@ -38,7 +40,7 @@ public class BookingController {
 	}
 
 	@PatchMapping("/{bookingId}")
-	public ResponseEntity<Object> updateStatus(
+	public ResponseEntity<BookingDto> updateStatus(
 			@PathVariable Long bookingId,
 			@RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId,
 			@RequestParam(defaultValue = "true") boolean approved) {
@@ -46,19 +48,19 @@ public class BookingController {
 	}
 
 	@GetMapping("/{bookingId}")
-	public ResponseEntity<Object> get(@PathVariable Long bookingId) {
+	public ResponseEntity<BookingDto> get(@PathVariable Long bookingId) {
 		return bookingClient.get(bookingId);
 	}
 
 	@GetMapping
-	public ResponseEntity<Object> getByUser(
+	public ResponseEntity<List<BookingDto>> getByUser(
 			@RequestParam(defaultValue = "ALL") BookingStatus state,
 			@RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
 		return bookingClient.getByBooker(userId, state);
 	}
 
 	@GetMapping("/owner")
-	public ResponseEntity<Object> getByOwner(
+	public ResponseEntity<List<BookingDto>> getByOwner(
 			@RequestParam(defaultValue = "ALL") BookingStatus state,
 			@RequestHeader(value = "X-Sharer-User-Id", required = false) @Positive Long userId) {
 		return bookingClient.getByOwner(userId, state);

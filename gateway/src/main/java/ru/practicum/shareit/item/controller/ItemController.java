@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,14 +33,14 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> getByUserId(
+    public ResponseEntity<List<ItemDto>> getByUserId(
             @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
         return itemClient.getByUserId(userId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> add(
+    public ResponseEntity<ItemDto> add(
             @Valid @RequestBody ItemDto item,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
         item.setOwnerId(userId);
@@ -48,7 +50,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> get(@PathVariable Long itemId) {
+    public ResponseEntity<ItemDto> get(@PathVariable Long itemId) {
         return itemClient.get(itemId);
     }
 
@@ -60,7 +62,7 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> patch(
+    public ResponseEntity<ItemDto> patch(
             @PathVariable Long itemId,
             @Valid @RequestBody ItemDto item,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId) {
@@ -71,7 +73,7 @@ public class ItemController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> search(@RequestParam String text) {
+    public ResponseEntity<List<ItemDto>> search(@RequestParam String text) {
         return itemClient.findAvailableByNameOrDescription(text);
     }
 }

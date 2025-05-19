@@ -1,39 +1,41 @@
 package ru.practicum.shareit.request;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
+import java.util.List;
 
-import ru.practicum.shareit.client.BaseClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+
+import ru.practicum.shareit.request.dto.RequestDto;
+import ru.practicum.shareit.system.client.BaseClient;
+import ru.practicum.shareit.system.client.ConvertResponse;
 
 @Service
 public class RequestClient extends BaseClient {
-    private static final String API_PREFIX = "/requests";
+    ConvertResponse convertResponse;
 
-    public RequestClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(
-                builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
-                        .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
-                        .build());
+    public RequestClient(@Value("${shareit-server.url}") String serverUrl, ConvertResponse convertResponse) {
+        super(serverUrl, "/requests");
+        this.convertResponse = convertResponse;
     }
 
-    public ResponseEntity<Object> add(long userId, String text) {
-        return post("", userId, null, text);
+    public ResponseEntity<RequestDto> add(long userId, String text) {
+        return convertResponse.toEntity(post("", userId, null, text), RequestDto.class);
     }
 
-    public ResponseEntity<Object> getByUserId(long userId) {
-        return get("", userId);
+    public ResponseEntity<List<RequestDto>> getByUserId(long userId) {
+        return convertResponse.toEntity(get("", userId), new TypeReference<List<RequestDto>>() {
+        });
     }
 
-    public ResponseEntity<Object> getAll() {
-        return get("/all", null, null);
+    public ResponseEntity<List<RequestDto>> getAll() {
+        return convertResponse.toEntity(get("/all", null, null), new TypeReference<List<RequestDto>>() {
+        });
     }
 
-    public ResponseEntity<Object> get(Long requestId) {
-        return get("/" + requestId, null, null);
+    public ResponseEntity<RequestDto> get(Long requestId) {
+        return convertResponse.toEntity(get("/" + requestId, null, null), RequestDto.class);
     }
 }

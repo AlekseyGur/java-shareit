@@ -1,29 +1,24 @@
 package ru.practicum.shareit.comment;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.comment.dto.CommentDto;
+import ru.practicum.shareit.system.client.BaseClient;
+import ru.practicum.shareit.system.client.ConvertResponse;
 
 @Service
 public class CommentClient extends BaseClient {
-    private static final String API_PREFIX = "/items";
+    ConvertResponse convertResponse;
 
-    public CommentClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(
-                builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
-                        .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
-                        .build());
+    public CommentClient(@Value("${shareit-server.url}") String serverUrl, ConvertResponse convertResponse) {
+        super(serverUrl, "/items");
+        this.convertResponse = convertResponse;
     }
 
-    public ResponseEntity<Object> add(Long userId, Long itemId, CommentDto comment) {
-        return post("/" + itemId + "/comment", userId, comment);
+    public ResponseEntity<CommentDto> add(Long userId, Long itemId, CommentDto comment) {
+        return convertResponse.toEntity(post("/" + itemId + "/comment", userId, comment), CommentDto.class);
     }
 
 }

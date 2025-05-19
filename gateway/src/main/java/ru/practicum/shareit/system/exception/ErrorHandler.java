@@ -2,14 +2,26 @@ package ru.practicum.shareit.system.exception;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> gatewayException(final GatewayException ex) {
+        HttpStatusCode status = ex.getStatus();
+        HttpHeaders headers = ex.getHeaders();
+
+        ErrorResponse err = new ErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(err, headers, status);
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -21,7 +33,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse methodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.error("Неверный запрос. " + e.getMessage());
+        log.error("Значение выходит за диапазон. " + e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
@@ -36,27 +48,6 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse accessDeniedException(final AccessDeniedException e) {
         log.error("Доступ заблокирован. " + e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse conditionsNotMetException(final ConditionsNotMetException e) {
-        log.error("Условия не выполнены. " + e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse duplicatedDataException(final DuplicatedDataException e) {
-        log.error("Дубликат данных. " + e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse notFoundException(final NotFoundException e) {
-        log.error("Ресурс не найден. " + e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 

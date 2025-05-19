@@ -1,41 +1,36 @@
 package ru.practicum.shareit.user;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import ru.practicum.shareit.client.BaseClient;
+import ru.practicum.shareit.system.client.BaseClient;
+import ru.practicum.shareit.system.client.ConvertResponse;
 import ru.practicum.shareit.user.dto.UserDto;
 
 @Service
 public class UserClient extends BaseClient {
-    private static final String API_PREFIX = "/users";
+    ConvertResponse convertResponse;
 
-    public UserClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(
-                builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX))
-                        .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
-                        .build());
+    public UserClient(@Value("${shareit-server.url}") String serverUrl, ConvertResponse convertResponse) {
+        super(serverUrl, "/users");
+        this.convertResponse = convertResponse;
     }
 
-    public ResponseEntity<Object> get(long userId) {
-        return get("/" + userId, null, null);
+    public ResponseEntity<UserDto> get(long userId) {
+        return convertResponse.toEntity(get("/" + userId, null, null), UserDto.class);
     }
 
-    public ResponseEntity<Object> save(UserDto userDto) {
-        return post("", null, null, userDto);
+    public ResponseEntity<UserDto> save(UserDto userDto) {
+        return convertResponse.toEntity(post("", null, null, userDto), UserDto.class);
     }
 
-    public ResponseEntity<Object> patch(UserDto userDto) {
+    public ResponseEntity<UserDto> patch(UserDto userDto) {
         long userId = userDto.getId();
-        return patch("/" + userId, userId, userDto);
+        return convertResponse.toEntity(patch("/" + userId, userId, userDto), UserDto.class);
     }
 
-    public ResponseEntity<Object> delete(long id) {
-        return delete("/" + id, null, null);
+    public void delete(long id) {
+        delete("/" + id, null, null);
     }
 }

@@ -26,7 +26,7 @@ public class CommentController {
 
     @PostMapping("/{itemId}/comment")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> addComment(
+    public ResponseEntity<CommentDto> addComment(
             @PathVariable Long itemId,
             @RequestHeader(value = "X-Sharer-User-Id", required = true) @Positive Long userId,
             @Valid @RequestBody CommentDto comment) {

@@ -19,13 +19,6 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse methodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.error("Неверный запрос. " + e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse internalServerException(final InternalServerException e) {
         log.error("Ошибка сервера. " + e.getMessage());
@@ -61,7 +54,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse validationException(final ValidationException e) {
         log.error("Данные не прошли проверку. " + e.getMessage());
         return new ErrorResponse(e.getMessage());

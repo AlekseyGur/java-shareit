@@ -54,7 +54,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validationException(final ValidationException e) {
         log.error("Данные не прошли проверку. " + e.getMessage());
         return new ErrorResponse(e.getMessage());
